@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+           http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+           http://www.springframework.org/schema/tx
+		   http://www.springframework.org/schema/tx/spring-tx.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop.xsd
+       ">
+
+	<context:component-scan base-package="com.wyb" />
+
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations" value="classpath:jdbc.properties"/>
+		<property name="fileEncoding" value="UTF-8"/>
+	</bean>
+
+	<!--数据源配置-->
+	<!--<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">-->
+	<!---->
+	<!--关于Druid 的相关问题详见 https://github.com/alibaba/druid/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98-->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init"
+		  destroy-method="close">
+		<!-- 基本属性 url、user、password -->
+		<property name="driverClassName" value="${jdbc.sys.driverClassName}" />
+		<property name="url" value="${jdbc.sys.url}" />
+		<property name="username" value="${jdbc.sys.username}" />
+		<property name="password" value="${jdbc.sys.password}" />
+		<!-- 配置初始化大小、最小、最大 -->
+		<property name="initialSize" value="5" />
+		<property name="maxActive" value="15" />
+		<!--连接泄漏监测 Druid提供了RemoveAbandanded相关配置，用来关闭长时间不使用的连接-->
+		<!-- 打开removeAbandoned功能 -->
+		<property name="removeAbandoned" value="true" />
+		<!-- 1800秒，也就是30分钟 -->
+		<property name="removeAbandonedTimeout" value="1800" />
+		<!-- 关闭abanded连接时输出错误日志 -->
+		<property name="logAbandoned" value="true" />
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="3000" />
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		<!-- 修改数据库连接的事务隔离级别为READ-COMMITED -->
+		<!--<property name="defaultTransactionIsolation" value="2" />-->
+
+		<property name="validationQuery">
+			<value>SELECT 1</value>
+		</property>
+		<property name="testOnBorrow">
+			<value>true</value>
+		</property>
+		<!-- 配置监控统计拦截的filters -->
+		<!--Druid提供了WallFilter，它是基于SQL语义分析来实现防御SQL注入攻击的-->
+		<!-- <property name="filters" value="wall,stat" /> 这样，拦截检测的时间不在StatFilter统计的SQL执行时间内。-->
+		<!-- <property name="filters" value="stat,wall" /> 这样，拦截检测的时间也算在StatFilter统计的SQL执行时间内。-->
+		<!--mergeStat 为SQL合并配置  Stat则是不合并的 -->
+		<property name="filters" value="mergeStat,wall" />
+	</bean>
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+
+		<!--方式一： 引入mybatis配置文件的方式 -->
+		<property name="configLocation" value="classpath:sqlmap-sys.xml" />
+
+		<!--方式二： 直接使用的方式 （mapperLocations 必须指定xml资源，不能通过引用资源文件的形式加载xml资源）-->
+		<!--<property name="typeAliasesPackage" value="com.wyb.rad.entity"/>-->
+      	<!-- 当mybatis的xml文件和mapper接口不在相同包下时，需要用mapperLocations属性指定xml文件的路径。
+         *是个通配符，代表所有的文件，**代表所有目录下 -->
+    	<!--<property name="mapperLocations" value="classpath:sqlmap/*.xml" />-->
+		<!-- 多个路径-->
+    	<!--<property name="mapperLocations">
+            <array>
+                <value>classpath:sqlmap/*.xml</value>
+                <value>classpath:sqlmap2/*.xml</value>
+            </array>
+        </property>-->
+
+		<!--因为Mapper.xml与Mapper.class不在同一个包下或者不同名，就必须使用配置mapperLocations指定mapper.xml的位置。
+		此时spring是通过识别mapper.xml中的 <mapper namespace="com.wybrad.dao.studentMapper">来确定对应的Mapper.class的。
+
+		如果Mapper.xml与Mapper.class在同一个包下且同名，
+		spring扫描Mapper.class的同时会自动扫描同名的Mapper.xml并装配到Mapper.class。
+		-->
+	</bean>
+
+	<!--mybatis自动扫描加载Sql映射文件/接口-->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!--使用sqlSessionFactoryBeanName属性，注入不同的sqlSessionFactory的名称，
+		这样就为不同的数据库对应的 mapper 接口注入了对应的 sql-->
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+		<!--basePackage指定要扫描的包，在此包之下的映射器都会被搜索到。
+		可指定多个包，包与包之间用逗号或分号分隔-->
+		<property name="basePackage" value="com.wyb.*.dao" />
+
+	</bean>
+	<!-- ================================事务相关控制================================================= -->
+
+	<bean name="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+
+
+	<!--声明式事务管理有两种常用的方式-->
+	<!-- 1.基于@Transactional注解 声明式事务管理 配置事物的注解方式注入-->
+	<!--<tx:annotation-driven transaction-manager="transactionManager"/>-->
+
+	<!--2.基于tx和aop命名空间的xml配置文件 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+
+			<tx:method name="insert*" propagation="REQUIRED" read-only="false"
+					   rollback-for="java.lang.Exception" />
+			<tx:method name="create*" propagation="REQUIRED" read-only="false"
+					   rollback-for="java.lang.Exception" />
+			<tx:method name="save*" propagation="REQUIRED" read-only="false"
+					   rollback-for="java.lang.Exception" />
+			<tx:method name="update*" propagation="REQUIRED" read-only="false"
+					   rollback-for="java.lang.Exception" />
+			<tx:method name="do*" propagation="REQUIRED" read-only="false"
+					   rollback-for="java.lang.Exception" />
+			<tx:method name="delete*" propagation="REQUIRED" read-only="false"
+				rollback-for="java.lang.Exception" />
+			<!--如有新命名不能涵盖的在此添加-->
+
+			<tx:method name="find*" propagation="SUPPORTS" />
+			<tx:method name="get*" propagation="SUPPORTS" />
+			<tx:method name="select*" propagation="SUPPORTS" />
+		</tx:attributes>
+	</tx:advice>
+
+	<aop:config>
+		<aop:pointcut id="serviceMethod"
+			expression="execution(* com.wyb..*ServiceImpl.*(..))" /> <!--把事务控制在Service层 -->
+		<aop:advisor pointcut-ref="serviceMethod" advice-ref="txAdvice" />
+
+	</aop:config>
+	<!-- 事务控制结束 -->
+
+	<!--ehcache 缓存配置-->
+	<bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation" value="classpath:ehcache.xml"/>
+		<property name="shared" value="true"></property>
+	</bean>
+
+	<!-- spring 封装ehcache缓存管理器  -->
+	<bean id="springCacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+		<property name="cacheManager" ref="ehCacheManager"/>
+	</bean>
+
+	<!-- shiro封装cacheManager -->
+	<bean id="shiroCacheManager"
+		  class="org.apache.shiro.cache.ehcache.EhCacheManager">
+		<property name="cacheManager" ref="ehCacheManager" />
+	</bean>
+
+	<!--shiro 配置文件-->
+	<import resource="classpath:spring-shiro.xml"/>
+
+</beans>

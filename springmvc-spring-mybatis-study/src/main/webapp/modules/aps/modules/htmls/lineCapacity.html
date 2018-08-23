@@ -1,0 +1,101 @@
+<div class="panel panel-default">
+    <div class="col-sm-12">
+        <ui-alert></ui-alert>
+    </div>
+
+    <div class="panel-heading">线体产能</div>
+    <div class="panel-heading">
+        <!-- 查询条件 -->
+        <div class="row">
+
+            <div class="col-sm-6 col-md-3">
+                <div class="panel-heading">
+                    <div class="input-group">
+					<span class="input-group-btn">
+						<button class="btn btn-info" type="button">厂区</button>
+					</span>
+
+                        <div ui-module="select2">
+                            <select ui-select2 ng-model="searchFactoryId" class="form-control ">
+                                <option value="">==全部==</option>
+                                <option ng-repeat="x in factoryTypeList" value="{{x.pid}}">{{x.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="panel-heading">
+                    <div class="form-group">
+                        <button class="btn btn-default" ng-click="getLineCapacity()"><i class="fa fa-search">查询</i>
+                        </button>
+                        &nbsp;&nbsp;&nbsp;
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 查询结果 -->
+    <div class="table-responsive">
+        <table class="table table-responsive table-striped b-t b-light">
+            <thead>
+            <tr>
+                <th>厂区</th>
+                <th>线体</th>
+                <th>卷绕(WID)</th>
+                <th>注液(IJT)</th>
+                <th>一封(TSS)</th>
+                <th>二封(DES)</th>
+                <th>夹具化成(FFN)</th>
+                <th>分容(CTT)</th>
+                <th>正极制片(CWD)</th>
+                <th>负极制片(AWD)</th>
+                <th>三合一(WAF)</th>
+                <th>冲坑(DMD)</th>
+                <th>真空烘烤(VDY)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="x in lineCapacityList">
+                <td style="width: 10%">{{x.FACTORY_ID}}</td>
+                <td style="width: 5%">{{x.LINE_ID}}</td>
+                <td>{{x.WID}}</td>
+                <td>{{x.IJT}}</td>
+                <td>{{x.TSS}}</td>
+                <td>{{x.DES}}</td>
+                <td>{{x.FFN}}</td>
+                <td>{{x.CTT}}</td>
+                <td>{{x.CWD}}</td>
+                <td>{{x.AWD}}</td>
+                <td>{{x.WAF}}</td>
+                <td>{{x.DMD}}</td>
+                <td>{{x.VDY}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- <footer class="panel-footer">
+      <div class="row">
+        <div class="col-sm-4 text-left text-center-xs">
+          <small class="text-muted inline m-t-sm m-b-sm">共{{count}}条数据</small>
+        </div>
+        <div class="col-sm-8 text-right text-center-xs">                
+          	<div>
+          		<ul class="pagination" style="margin-top: 0px;margin-bottom: 0px;">
+          			<li><a>共{{pageNoSum}}页</a></li>
+    				<li><a ng-click="(searchData.pageNo = searchData.pageNo-1>=1?searchData.pageNo-1:1)">&laquo;</a></li>
+   					<li><a style="padding-right: 6px;padding-left: 6px;padding-top: 3px;padding-bottom: 3px;">
+   						<input style="width: 50px;height: 23px;text-align:center; border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 0px;padding-bottom: 0px;padding-top: 0px;"type="number" ng-model="searchData.pageNo"/>
+   						</a>
+   					</li>
+    				<li><a ng-click="(searchData.pageNo = searchData.pageNo+1)" >&raquo;</a></li>
+				</ul>
+			</div>
+        </div>
+      </div>
+    </footer> -->
+
+
+    <ui-confirm></ui-confirm>

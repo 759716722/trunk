@@ -1,0 +1,177 @@
+<div class="panel panel-default">
+    <div class="col-sm-12">
+        <ui-alert></ui-alert>
+    </div>
+
+    <div class="panel-heading">人员参数信息</div>
+    <div class="panel-heading">
+        <!-- 查询条件 -->
+        <div class="row">
+            <!-- 1  -->
+            <div class="col-sm-6 col-md-3">
+                <div class="panel-heading">
+                    <div class="input-group">
+					<span class="input-group-btn">
+						<button class="btn btn-info" type="button">产品型号</button>
+					</span>
+                        <input type="text" class="form-control" ng-model="addData.prodtype">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2 -->
+            <div class="col-sm-6 col-md-3">
+                <div class="panel-heading">
+                    <div class="input-group">
+					<span class="input-group-btn">
+						<button class="btn btn-info" type="button">工序</button>
+					</span>
+
+                        <div ui-module="select2">
+                            <select ui-select2 ng-model="searchData.operationId" class="form-control ">
+                                <option value="">==全部==</option>
+                                <option ng-repeat="x in operationTypeList" value="{{x.pid}}">{{x.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 3  -->
+            <div class="col-sm-6 col-md-3">
+                <div class="panel-heading">
+                    <div class="form-group">
+                        <button class="btn btn-default" ng-click="searchPassRate()"><i class="fa fa-search">查询</i>
+                        </button>
+                        &nbsp;&nbsp;&nbsp;
+                        <button class="btn btn-success" ng-click="addPassRate()">
+                            <li class="fa icon-plus"></li>
+                            新增
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 查询结果 -->
+    <div class="table-responsive">
+        <table class="table table-responsive table-striped b-t b-light">
+            <thead>
+            <tr>
+                <th>产品型号</th>
+                <th>工序</th>
+                <th>直通率</th>
+                <th>创建人</th>
+                <th>创建时间</th>
+                <th>修改人</th>
+                <th>修改时间</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="x in dataList">
+                <td style="width: 10%">{{x.prodtype}}</td>
+                <td style="width: 10%">{{x.operationId}}</td>
+                <td style="width: 10%">{{x.passRate}}</td>
+                <td style="width: 10%">{{x.createName}}</td>
+                <td style="width: 10%">{{x.createDate.time | date:'yyyy-MM-dd'}}</td>
+                <td style="width: 10%">{{x.modifyName}}</td>
+                <td style="width: 10%">{{x.modifyDate.time | date:'yyyy-MM-dd'}}</td>
+                <td style="width: 20%">
+                    <button class="btn btn-info" ng-click="editPassRate(x.pid)">编辑</button>
+                    &nbsp;
+                    <button class="btn btn-danger" ng-click="doDeletePassRate(x)">删除</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <footer class="panel-footer">
+        <div class="row">
+            <div class="col-sm-4 text-left text-center-xs">
+                <small class="text-muted inline m-t-sm m-b-sm">共{{count}}条数据</small>
+            </div>
+            <div class="col-sm-8 text-right text-center-xs">
+                <div>
+                    <ul class="pagination" style="margin-top: 0px;margin-bottom: 0px;">
+                        <li><a>共{{pageNoSum}}页</a></li>
+                        <li><a ng-click="(searchData.pageNo = searchData.pageNo-1>=1?searchData.pageNo-1:1)">&laquo;</a>
+                        </li>
+                        <li><a style="padding-right: 6px;padding-left: 6px;padding-top: 3px;padding-bottom: 3px;">
+                            <input style="width: 50px;height: 23px;text-align:center; border-top-width: 0px;border-right-width: 0px;border-left-width: 0px;border-bottom-width: 0px;padding-bottom: 0px;padding-top: 0px;"
+                                   type="number" ng-model="searchData.pageNo"/>
+                        </a>
+                        </li>
+                        <li><a ng-click="(searchData.pageNo = searchData.pageNo+1)">&raquo;</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="myModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- 标题 -->
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">直通率信息</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <!-- 产品型号  -->
+                        <div class="col-sm-6 col-md-6">
+                            <div class="panel-heading">
+                                <div class="input-group">
+							<span class="input-group-btn">
+								<button class="btn btn-info" type="button">产品型号</button>
+							</span>
+                                    <input type="text" class="form-control" ng-model="addData.prodtype">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 工序  -->
+                        <div class="col-sm-6 col-md-6">
+                            <div class="panel-heading">
+                                <div class="input-group">
+							<span class="input-group-btn">
+								<button class="btn btn-info" type="button">工序</button>
+							</span>
+
+                                    <div ui-module="select2">
+                                        <select ui-select2 ng-model="addData.operationId" class="form-control ">
+                                            <option value="">==全部==</option>
+                                            <option ng-repeat="x in operationTypeList" value="{{x.pid}}">{{x.name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 直通率 -->
+                        <div class="col-sm-6 col-md-6">
+                            <div class="panel-heading">
+                                <div class="input-group">
+							<span class="input-group-btn">
+								<button class="btn btn-info" type="button">直通率</button>
+							</span>
+                                    <input type="text" class="form-control" ng-model="addData.passRate">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- 提交 -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" ng-click="savePassRate()">提交保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ui-confirm></ui-confirm>

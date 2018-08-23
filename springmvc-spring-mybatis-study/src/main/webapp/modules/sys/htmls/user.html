@@ -1,0 +1,227 @@
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            用户信息
+        </h3>
+    </div>
+
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-6 col-md-3">
+                <div class="input-group">
+                    <span class="input-group-addon">账号</span>
+                    <input type="text" class="form-control" ng-model="searchData.name">
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="input-group">
+                    <span class="input-group-addon">名称</span>
+                    <input type="text" class="form-control" ng-model="searchData.loginName">
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="input-group">
+                    <span class="input-group-addon">状态</span>
+                    <select select2 type="text" class="form-control" ng-model="searchData.state">
+                        <option value="">==全部==</option>
+                        <option ng-repeat="x in stateList" value="{{x.id}}">{{x.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-2">
+                <div class="form-group">
+                    <button class="btn btn-default" ng-click="getUser()">查询</button>
+                    <button class="btn btn-info" ng-click="addUser()">新增</button>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-condensed">
+                <caption>用户列表</caption>
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>账户</th>
+                    <th>登录名</th>
+                    <th>性别</th>
+                    <th>年龄</th>
+                    <th>电话</th>
+                    <th>邮箱</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="x in dataList">
+                    <td>{{x.rowNo}}</td>
+                    <td>{{x.name}}</td>
+                    <td>{{x.loginName}}</td>
+                    <td>{{x.sex==1?'男':x.sex==2?'女':''}}</td>
+                    <td>{{(nowTime-x.birthday)/(365*1000*24*60*60) | number:0}}</td>
+                    <td>{{x.phone}}</td>
+                    <td>{{x.email}}</td>
+                    <td>
+                        <div class="btn-group" ng-click="doModifyState(x)">
+                            <button ng-class="x.state==1?'btn btn-xs btn-primary':'btn btn-xs'">启用</button>
+                            <button ng-class="x.state==0?'btn btn-xs btn-primary':'btn btn-xs'">禁用</button>
+                        </div>
+                    </td>
+                    <td>
+                        <button class="btn btn-xs btn-info" ng-click="editUser(x.id)">
+                            <span class="glyphicon glyphicon-edit">编辑</span>
+                        </button>
+                        <button class="btn btn-xs btn-danger" ng-click="doDeleteUser(x.id)">
+                            <span class="glyphicon glyphicon-trash">删除</span>
+                        </button>
+                    </td>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div class="panel-footer">
+        <div class="row">
+            <div class="col-sm-4 text-left text-center-xs">
+                <small class="text-muted inline m-t-sm m-b-sm">共{{dataCount}}条数据</small>
+            </div>
+            <div class="col-sm-8 text-right text-center-xs">
+                <my-pagination count-data="{{dataCount}}" one-page-total="{{searchData.onePageNum}}" curr-page="searchData.pageNo" get-date-func="getUser()"></my-pagination>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- 标题 -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">用户信息</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col-sm-6 col-md-6">
+                        <div class="panel-heading">
+                            <div class="input-group">
+                                <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">账户</button>
+							    </span>
+                                <input type="text" class="form-control" ng-model="addData.name">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-6">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">登录名</button>
+							    </span>
+                                <input type="text" class="form-control" ng-model="addData.loginName">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-6">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">密码</button>
+							    </span>
+                                <input type="password" class="form-control" ng-model="addData.password">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-6">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">性别</button>
+							    </span>
+                                <select select2 type="text" class="form-control" ng-model="addData.sex">
+                                    <option ng-repeat="x in sexList" value="{{x.id}}">{{x.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-6">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">年龄</button>
+							    </span>
+                                <laydate class="form-control" ng-model="addData.birthday">{{addData.birthday | date:'yyyy-MM-dd'}}</laydate>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-6">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">部门</button>
+							    </span>
+                                <select select2 type="text" class="form-control" ng-model="addData.deptId">
+                                    <option ng-repeat="x in deptList" value="{{x.id}}">{{x.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-6">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">手机</button>
+							    </span>
+                                <input type="text" class="form-control" ng-model="addData.phone">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-6">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">邮箱</button>
+							    </span>
+                                <input type="text" class="form-control" ng-model="addData.email">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-6">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+                                    <button class="btn btn-info" type="button">状态</button>
+							    </span>
+                                <select select2 type="text" class="form-control" ng-model="addData.state">
+                                    <option ng-repeat="x in stateList" value="{{x.id}}">{{x.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <!-- 提交 -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-success" ng-click="saveUser()">提交保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

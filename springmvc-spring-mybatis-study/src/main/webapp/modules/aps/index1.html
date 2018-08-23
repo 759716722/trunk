@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" data-ng-app="app" ng-controller="AppCtrl">
+<head>
+    <meta charset="utf-8"/>
+    <title>{{title}}</title>
+    <meta name="description" content="APS"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <link rel="stylesheet" href="../framework/css/bootstrap.css?v1=1" type="text/css"/>
+    <link rel="stylesheet" href="../framework/css/animate.css" type="text/css"/>
+    <link rel="stylesheet" href="../framework/css/font-awesome.min.css" type="text/css"/>
+    <link rel="stylesheet" href="../framework/css/simple-line-icons.css" type="text/css"/>
+    <link rel="stylesheet" href="../framework/css/font.css" type="text/css"/>
+    <link rel="stylesheet" href="../framework/css/app.css" type="text/css"/>
+    <link rel="stylesheet" href="../framework/js/jquery/loadbar/loading-bar.css" type="text/css"/>
+
+</head>
+<body>
+
+<div>
+    <!-- 左侧 -->
+    <div style="float:left;width: 10%; ">
+        <ul class="nav nav-pills nav-stacked">
+            <li class="nav-header"><a>导航栏</a></li>
+            <li class="active"><a ui-sref='dataWorkbook'>数据字典</a></li>
+            <li class="active"><a ui-sref='equParam'>设备信息</a></li>
+            <li class="active"><a ui-sref='iePerson'>人员信息</a></li>
+            <li class="active"><a ui-sref='passRate'>直通率信息</a></li>
+            <li class="active"><a ui-sref='ieDifficult'>难度系数</a></li>
+            <li class="active"><a ui-sref='operationDifficult'>难度系数定义</a></li>
+            <li class="active"><a ui-sref='lineCapacity'>各线体产能</a></li>
+            <li class="active"><a ui-sref='prodtypeCapacity'>型号产能</a></li>
+
+        </ul>
+    </div>
+    <!-- 右侧 -->
+    <div style="float:right; width: 90%;" ui-view></div>
+</div>
+
+<!-- jQuery -->
+<script src="../framework/js/jquery/jquery.min.js"></script>
+<!-- Angular -->
+<script src="../framework/js/angular/angular.min.js"></script>
+
+<!-- App -->
+<script src="modules/core/app.js?v=00"></script>
+<script src="modules/core/services.js?v=1"></script>
+<script src="modules/core/controllers.js"></script>
+<script src="modules/core/route.js"></script>
+
+<!-- controllers -->
+<script src="modules/controllers/dataWorkbook-controller.js"></script>
+<script src="modules/controllers/equParam-controller.js"></script>
+<script src="modules/controllers/iePerson-controller.js"></script>
+<script src="modules/controllers/passRate-controller.js"></script>
+<script src="modules/controllers/ieDifficult-controller.js"></script>
+<script src="modules/controllers/lineCapacity-controller.js"></script>
+<script src="modules/controllers/prodtypeCapacity-controller.js"></script>
+
+</body>
+</html>

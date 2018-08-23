@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+
+    <context:component-scan base-package="com.wyb.sys.action"></context:component-scan>
+
+    <mvc:annotation-driven></mvc:annotation-driven>
+
+    <!-- 在spring框架中当使用post请求服务，然后请求成功转到一个静态文件，如html，htm等网页时,
+	页面出现405 request method post not supported错误，只要在spring的配置文件中加入下面代码即可 -->
+    <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="urlMap">
+            <map>
+                <entry key="/**" value="myResourceHandler"/>
+            </map>
+        </property>
+        <property name="order" value="100000"/>
+    </bean>
+    <bean id="myResourceHandler"
+          name="myResourceHandler"
+          class="org.springframework.web.servlet.resource.ResourceHttpRequestHandler">
+        <property name="locations" value="/"/>
+        <property name="supportedMethods">
+            <list>
+                <value>GET</value>
+                <value>HEAD</value>
+                <value>POST</value>
+            </list>
+        </property>
+    </bean>
+
+    <!--&lt;!&ndash;转化json 这里我们不需要 使用 mvc:annotation-driven时就默认加载了该解析器&ndash;&gt;
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                &lt;!&ndash;json视图拦截器，@ResponseBody（将java对象转换成json） @RequestBody（将json转换成java对象）&ndash;&gt;
+                <ref bean="mappingJacksonHttpMessageConverter"/>
+            </list>
+        </property>
+    </bean>
+    &lt;!&ndash;json转化器，它可以将结果转化&ndash;&gt;
+    <bean id="mappingJacksonHttpMessageConverter"
+          class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+
+        <property name="objectMapper">
+            <bean class="com.fasterxml.jackson.databind.ObjectMapper">
+                &lt;!&ndash; 处理responseBody 里面日期类型 &ndash;&gt;
+                &lt;!&ndash;   <property name="dateFormat">
+                      <bean class="java.text.SimpleDateFormat">
+                          <constructor-arg type="java.lang.String" value="yyyy-MM-dd HH:mm:ss" />
+                      </bean>
+                  </property>  &ndash;&gt;
+                &lt;!&ndash; 为null字段时不输出 &ndash;&gt;
+                <property name="serializationInclusion">
+                    <value type="com.fasterxml.jackson.annotation.JsonInclude.Include">NON_NULL</value>
+                </property>
+                &lt;!&ndash; 驼峰命名法转换为小写加下划线  &ndash;&gt;
+                <property name="propertyNamingStrategy">
+                    &lt;!&ndash;<bean class="com.xxx.serializer.MyPropertyNamingStrategyBase" />&ndash;&gt;
+                    <bean class="com.fasterxml.jackson.databind.PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy"/>
+                </property>
+
+            </bean>
+        </property>
+
+
+        <property name="supportedMediaTypes">
+            <list>
+                <value>application/json;charset=UTF-8</value>
+                <value>text/html;charset=UTF-8</value>
+            </list>
+        </property>
+
+    </bean>-->
+
+
+    <!--jsp视图解析  这里暂时我们没用到-->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+          p:prefix="/jsp/"
+          p:suffix=".jsp"/>
+
+</beans>

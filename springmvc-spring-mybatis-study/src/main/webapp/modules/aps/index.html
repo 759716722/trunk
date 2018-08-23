@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" data-ng-app="app" ng-controller="AppCtrl">
+<head>
+    <meta charset="utf-8"/>
+    <title>{{title}}</title>
+    <meta name="description" content="aps"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <link rel="stylesheet" href="../lib/bootstrap/css/bootstrap.css?v1=1" type="text/css"/>
+
+</head>
+<body>
+
+<div ui-view></div>
+
+<!-- jQuery -->
+<script src="../lib/jquery/jquery-3.2.1.min.js"></script>
+<!-- Angular -->
+<script src="../lib/angular/angular.min.js"></script>
+<script src="../lib/angular/angular-ui-router.min.js"></script>
+<script src="../lib/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- App -->
+<script src="modules/core/app.js?v=00"></script>
+<script src="modules/core/services.js?v=1"></script>
+<script src="modules/core/controllers.js"></script>
+<script src="modules/core/route.js"></script>
+
+<!-- controllers -->
+<script src="modules/controllers/dataWorkbook-controller.js"></script>
+<script src="modules/controllers/equParam-controller.js"></script>
+<script src="modules/controllers/iePerson-controller.js"></script>
+<script src="modules/controllers/passRate-controller.js"></script>
+<script src="modules/controllers/ieDifficult-controller.js"></script>
+<script src="modules/controllers/lineCapacity-controller.js"></script>
+<script src="modules/controllers/prodtypeCapacity-controller.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<!--<settings>
+		<setting name="cacheEnabled" value="false"/>
+		<setting name="lazyLoadingEnabled" value="false"/>
+		<setting name="aggressiveLazyLoading" value="true"/>
+		<setting name="logImpl" value="STDOUT_LOGGING"/>
+	</settings>-->
+
+    <typeAliases> 
+        <package name="com.wyb.sys.entity"/>
+    </typeAliases> 
+    <!-- 与spring 集成之后,这些可以完全删除,数据库连接的管理交给 spring 去管理 -->
+    <!-- 
+	<environments default="development">
+		<environment id="development">
+		<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+			<property name="driver" value="com.mysql.jdbc.Driver"/>
+			<property name="url" value="jdbc:mysql://127.0.0.1:3306/mybatis?characterEncoding=utf8" />
+			<property name="username" value="root"/>
+			<property name="password" value="password"/>
+			</dataSource>
+		</environment>
+	</environments>
+	-->
+
+	<!-- 这里交给sqlSessionFactory 的 mapperLocations属性去得到所有配置信息 -->
+	<!-- --> 
+	<mappers>
+		<mapper resource="sqlmap/SysUserMapper.xml"></mapper>
+		<mapper resource="sqlmap/SysDeptMapper.xml"></mapper>
+		<mapper resource="sqlmap/SysRoleMapper.xml"></mapper>
+		<mapper resource="sqlmap/SysMenuMapper.xml"></mapper>
+		<mapper resource="sqlmap/SysUserRoleMapper.xml"></mapper>
+		<mapper resource="sqlmap/SysRoleMenuMapper.xml"></mapper>
+
+	</mappers>
+	
+	
+</configuration>

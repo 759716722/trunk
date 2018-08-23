@@ -1,0 +1,2753 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> ZTREE DEMO </title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="../static/lib/jquery/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+
+</head>
+<body>
+<div>
+
+    <ul id="treeDemo" class="ztree"></ul>
+</div>
+
+<script src="../static/lib/jquery/jquery-3.2.1.min.js"></script>
+<script src="../static/lib/jquery/ztree/js/jquery.ztree.all.min.js"></script>
+<script language="javascript">
+    var zTreeObj;
+    // zTree 的参数配置，深入使用请参考 API 文档（setting 配置详解）
+    var setting = {
+        /*async: {
+            enable: true,
+            url: "",
+            autoParam: ["id"]
+        },*/
+        /*edit: {
+            enable: true,
+            showRemoveBtn: true,
+            showRenameBtn: true,
+            drag: {
+                isCopy: true,
+                isMove: true
+            }
+        },*/
+        view: {
+            addHoverDom: addHoverDom,
+            removeHoverDom: removeHoverDom,
+            showIcon: true,
+            showTitle: true
+        },
+        data: {
+            key : {
+                title : "fnumber", //鼠标悬停显示的信息
+                name : "fname" //网页上显示出节点的名称
+            },
+            simpleData: {
+                enable: true,
+                idKey: "fitemid", //修改默认的ID为自己的ID
+                pIdKey: "levelId",//修改默认父级ID为自己数据的父级ID
+                rootPId: 0     //根节点的ID
+            }
+        }
+    };
+
+    function addHoverDom(treeId, treeNode) {
+        var aObj = $("#" + treeNode.tId + "_a");
+        if ($("#editBtn_"+treeNode.id).length>0) return;
+        if ($("#removeBtn_"+treeNode.id).length>0) return;
+        var editStr ="<span type='button' class='button edit' id='editBtn_" + treeNode.id
+                + "' title='"+treeNode.name+"'></span>"
+                +"<span type='button' class='button remove' id='removeBtn_" + treeNode.id
+                + "' title='"+treeNode.name+"'></span>";
+        aObj.append(editStr);
+        var editBtn = $("#editBtn_"+treeNode.id);
+        var removeBtn = $("#removeBtn_"+treeNode.id);
+        if (editBtn) editBtn.bind("click", editClick);
+        if (removeBtn) removeBtn.bind("click",removeClick);
+    };
+    function removeHoverDom(treeId, treeNode) {
+        $("#editBtn_"+treeNode.id).unbind().remove();
+        $("#removeBtn_"+treeNode.id).unbind().remove();
+    };
+
+    function editClick(treeNode){
+        alert(11111111);
+    }
+    function removeClick(treeNode){
+        alert(22222222);
+    }
+
+    // zTree 的数据属性，深入使用请参考 API 文档（zTreeNode 节点数据详解）
+    var zNodes = [
+        /*{
+            title:"test111",name: "test1", open: true, children: [
+            {title: "test111_1",name: "test1_1"}, {title: "test111_2",name: "test1_2"}]
+        },
+        {
+            title:"test222",name: "test2", open: true, children: [
+            {title: "test222_1",name: "test2_1"}, {title: "test222_2",name: "test2_2"}]
+        }*/
+
+
+
+
+            {
+                "levelId": "554",
+                "finterid": "1322",
+                "fbomnumber": "BOM000185",
+                "fqty": "1.005",
+                "fitemid": "2701",
+                "fnumber": "02.01.00261",
+                "fname": "压条(毛坯)"
+            },
+            {
+                "levelId": "554",
+                "finterid": "1330",
+                "fbomnumber": "BOM000194",
+                "fqty": ".06",
+                "fitemid": "3107",
+                "fnumber": "02.02.01221",
+                "fname": "封盖(毛坯)"
+            },
+            {
+                "levelId": "554",
+                "finterid": "1530",
+                "fbomnumber": "BOM000393",
+                "fqty": ".678",
+                "fitemid": "2715",
+                "fnumber": "02.01.00401",
+                "fname": "压条(毛坯)"
+            },
+            {
+                "levelId": "554",
+                "finterid": "1662",
+                "fbomnumber": "BOM000524",
+                "fqty": ".678",
+                "fitemid": "4536",
+                "fnumber": "02.04.03461",
+                "fname": "垫板(毛坯)"
+            },
+            {
+                "levelId": "554",
+                "finterid": "1796",
+                "fbomnumber": "BOM000660",
+                "fqty": ".678",
+                "fitemid": "4530",
+                "fnumber": "02.04.03441",
+                "fname": "压条(毛坯)"
+            },
+            {
+                "levelId": "554",
+                "finterid": "2010",
+                "fbomnumber": "BOM000871",
+                "fqty": ".601",
+                "fitemid": "4438",
+                "fnumber": "02.04.02931",
+                "fname": "压条(毛坯)"
+            },
+            {
+                "levelId": "554",
+                "finterid": "2096",
+                "fbomnumber": "BOM000956",
+                "fqty": ".612",
+                "fitemid": "2719",
+                "fnumber": "02.01.00421",
+                "fname": "压条(毛坯)"
+            },
+            {
+                "levelId": "554",
+                "finterid": "2679",
+                "fbomnumber": "BOM001538",
+                "fqty": ".043",
+                "fitemid": "4284",
+                "fnumber": "02.04.02291",
+                "fname": "Y光藕片(毛坯)"
+            },
+            {
+                "levelId": "554",
+                "finterid": "2815",
+                "fbomnumber": "BOM001673",
+                "fqty": ".563",
+                "fitemid": "2710",
+                "fnumber": "02.01.00361",
+                "fname": "压条(毛坯)"
+            },
+            {
+                "levelId": "554",
+                "finterid": "2832",
+                "fbomnumber": "BOM001688",
+                "fqty": "1.949",
+                "fitemid": "4105",
+                "fnumber": "02.04.01520",
+                "fname": "电机盖板"
+            },
+            {
+                "levelId": "554",
+                "finterid": "3367",
+                "fbomnumber": "BOM002227",
+                "fqty": "1",
+                "fitemid": "8251",
+                "fnumber": "02.27.00331",
+                "fname": "压痕套(毛坯)"
+            },
+            {
+                "levelId": "554",
+                "finterid": "3423",
+                "fbomnumber": "BOM002284",
+                "fqty": ".122",
+                "fitemid": "2749",
+                "fnumber": "02.01.00601",
+                "fname": "调节杆-CB03(毛坯)"
+            },
+            {
+                "levelId": "554",
+                "finterid": "4178",
+                "fbomnumber": "BOM003040",
+                "fqty": ".747",
+                "fitemid": "2680",
+                "fnumber": "02.01.00051",
+                "fname": "压条(毛坯)"
+            },
+            {
+                "levelId": "554",
+                "finterid": "4188",
+                "fbomnumber": "BOM003051",
+                "fqty": ".85",
+                "fitemid": "3906",
+                "fnumber": "02.04.00601",
+                "fname": "压条(毛坯)"
+            },
+            {
+                "levelId": "554",
+                "finterid": "4207",
+                "fbomnumber": "BOM003067",
+                "fqty": ".85",
+                "fitemid": "3998",
+                "fnumber": "02.04.01071",
+                "fname": "压条(毛坯)"
+            },
+            {
+                "levelId": "554",
+                "finterid": "4238",
+                "fbomnumber": "BOM003097",
+                "fqty": ".8",
+                "fitemid": "2707",
+                "fnumber": "02.01.00321",
+                "fname": "压条(毛坯)"
+            },
+            {
+                "levelId": "554",
+                "finterid": "4357",
+                "fbomnumber": "BOM003217",
+                "fqty": ".236",
+                "fitemid": "2840",
+                "fnumber": "02.02.00291",
+                "fname": "横梁盖(毛坯)"
+            },
+            {
+                "levelId": "554",
+                "finterid": "4359",
+                "fbomnumber": "BOM003219",
+                "fqty": ".219",
+                "fitemid": "3995",
+                "fnumber": "02.04.01041",
+                "fname": "压条(毛坯)"
+            },
+            {
+                "levelId": "554",
+                "finterid": "4719",
+                "fbomnumber": "BOM003578",
+                "fqty": ".485",
+                "fitemid": "2741",
+                "fnumber": "02.01.00560",
+                "fname": "底板"
+            },
+            {
+                "levelId": "554",
+                "finterid": "4882",
+                "fbomnumber": "BOM003741",
+                "fqty": "2.532",
+                "fitemid": "18432",
+                "fnumber": "02.01.00840",
+                "fname": "电机盖板"
+            },
+            {
+                "levelId": "554",
+                "finterid": "5031",
+                "fbomnumber": "BOM003892",
+                "fqty": ".04",
+                "fitemid": "18384",
+                "fnumber": "02.02.01691",
+                "fname": "行程开关定位板(毛坯)"
+            },
+            {
+                "levelId": "554",
+                "finterid": "5513",
+                "fbomnumber": "BOM004375",
+                "fqty": ".64",
+                "fitemid": "2677",
+                "fnumber": "02.01.00041",
+                "fname": "压条(毛坯)"
+            },
+            {
+                "levelId": "554",
+                "finterid": "5619",
+                "fbomnumber": "BOM004479",
+                "fqty": ".09",
+                "fitemid": "23861",
+                "fnumber": "02.04.08751",
+                "fname": "安全付板(毛坯)"
+            },
+            {
+                "levelId": "554",
+                "finterid": "6277",
+                "fbomnumber": "BOM005146",
+                "fqty": ".9",
+                "fitemid": "2682",
+                "fnumber": "02.01.00061",
+                "fname": "压条(毛坯)"
+            },
+            {
+                "levelId": "2682",
+                "finterid": "2189",
+                "fbomnumber": "BOM001048",
+                "fqty": "1",
+                "fitemid": "3919",
+                "fnumber": "02.01.00060",
+                "fname": "压条(喷塑4469)"
+            },
+            {
+                "levelId": "3919",
+                "finterid": "3231",
+                "fbomnumber": "BOM002091",
+                "fqty": "1",
+                "fitemid": "10014",
+                "fnumber": "03.21.0097",
+                "fname": "横梁组件"
+            },
+            {
+                "levelId": "10014",
+                "finterid": "2034",
+                "fbomnumber": "BOM000989",
+                "fqty": "1",
+                "fitemid": "9220",
+                "fnumber": "03.01.7008",
+                "fname": "CB03-3020-RM-SA3机身模块"
+            },
+            {
+                "levelId": "10014",
+                "finterid": "5795",
+                "fbomnumber": "BOM004656",
+                "fqty": "1",
+                "fitemid": "24432",
+                "fnumber": "03.01.6012",
+                "fname": "FH03-3020-RM-SA3机身模块"
+            },
+            {
+                "levelId": "24432",
+                "finterid": "5707",
+                "fbomnumber": "BOM004568",
+                "fqty": "1",
+                "fitemid": "23718",
+                "fnumber": "04.06.0040",
+                "fname": "FH03-3020-RM-SA3"
+            },
+            {
+                "levelId": "23861",
+                "finterid": "5637",
+                "fbomnumber": "BOM004506",
+                "fqty": "1",
+                "fitemid": "23968",
+                "fnumber": "02.04.08750",
+                "fname": "安全付板(喷塑7035)"
+            },
+            {
+                "levelId": "23968",
+                "finterid": "5553",
+                "fbomnumber": "BOM004419",
+                "fqty": "2",
+                "fitemid": "23805",
+                "fnumber": "03.21.0357",
+                "fname": "防撞组件"
+            },
+            {
+                "levelId": "23805",
+                "finterid": "5997",
+                "fbomnumber": "BOM004856",
+                "fqty": "2",
+                "fitemid": "23798",
+                "fnumber": "03.01.5004",
+                "fname": "BK02-2516-RM-SB2机身模块"
+            },
+            {
+                "levelId": "23805",
+                "finterid": "6415",
+                "fbomnumber": "BOM005281",
+                "fqty": "2",
+                "fitemid": "26701",
+                "fnumber": "03.01.5003",
+                "fname": "BK02-2516-RM-SB3机身模块"
+            },
+            {
+                "levelId": "26701",
+                "finterid": "6422",
+                "fbomnumber": "BOM005282",
+                "fqty": "1",
+                "fitemid": "26601",
+                "fnumber": "04.05.0730",
+                "fname": "BK02-2516-RM-SB3"
+            },
+            {
+                "levelId": "23798",
+                "finterid": "5718",
+                "fbomnumber": "BOM004578",
+                "fqty": "1",
+                "fitemid": "24177",
+                "fnumber": "04.05.0710",
+                "fname": "BK02-2516-RM-SB2"
+            },
+            {
+                "levelId": "2677",
+                "finterid": "5512",
+                "fbomnumber": "BOM004374",
+                "fqty": "1",
+                "fitemid": "2676",
+                "fnumber": "02.01.00040",
+                "fname": "压条(喷塑4469)"
+            },
+            {
+                "levelId": "2676",
+                "finterid": "5509",
+                "fbomnumber": "BOM004371",
+                "fqty": "1",
+                "fitemid": "9991",
+                "fnumber": "03.21.0074",
+                "fname": "横梁组件"
+            },
+            {
+                "levelId": "18384",
+                "finterid": "5030",
+                "fbomnumber": "BOM003891",
+                "fqty": "1",
+                "fitemid": "18383",
+                "fnumber": "02.02.01690",
+                "fname": "行程开关定位板(普通本色氧化)"
+            },
+            {
+                "levelId": "18383",
+                "finterid": "4936",
+                "fbomnumber": "BOM003796",
+                "fqty": "1",
+                "fitemid": "18194",
+                "fnumber": "03.03.0038",
+                "fname": "AF101-1600自动纠偏送料机模块"
+            },
+            {
+                "levelId": "18432",
+                "finterid": "5864",
+                "fbomnumber": "BOM004723",
+                "fqty": "1",
+                "fitemid": "24869",
+                "fnumber": "03.21.0363",
+                "fname": "RC03-1512平台组件"
+            },
+            {
+                "levelId": "24869",
+                "finterid": "4851",
+                "fbomnumber": "BOM003712",
+                "fqty": "1",
+                "fitemid": "18407",
+                "fnumber": "03.01.4004",
+                "fname": "RC03-1512-SB2机身模块"
+            },
+            {
+                "levelId": "18407",
+                "finterid": "5053",
+                "fbomnumber": "BOM003914",
+                "fqty": "1",
+                "fitemid": "18541",
+                "fnumber": "04.04.0310",
+                "fname": "RC03-1512-SB2"
+            },
+            {
+                "levelId": "18407",
+                "finterid": "6423",
+                "fbomnumber": "BOM005283",
+                "fqty": "1",
+                "fitemid": "26543",
+                "fnumber": "04.04.0340",
+                "fname": "RC03-1512-EB2"
+            },
+            {
+                "levelId": "2741",
+                "finterid": "4709",
+                "fbomnumber": "BOM003576",
+                "fqty": "1",
+                "fitemid": "9770",
+                "fnumber": "03.06.0020",
+                "fname": "CB03气动滚刀工具模块"
+            },
+            {
+                "levelId": "2741",
+                "finterid": "6404",
+                "fbomnumber": "BOM005263",
+                "fqty": "1",
+                "fitemid": "9860",
+                "fnumber": "03.06.0066",
+                "fname": "气源控制模块"
+            },
+            {
+                "levelId": "3995",
+                "finterid": "4358",
+                "fbomnumber": "BOM003218",
+                "fqty": "1",
+                "fitemid": "3994",
+                "fnumber": "02.04.01040",
+                "fname": "压条(喷塑7035)"
+            },
+            {
+                "levelId": "3994",
+                "finterid": "4319",
+                "fbomnumber": "BOM003180",
+                "fqty": "1",
+                "fitemid": "10061",
+                "fnumber": "03.21.0142",
+                "fname": "横梁组件"
+            },
+            {
+                "levelId": "10061",
+                "finterid": "4312",
+                "fbomnumber": "BOM003172",
+                "fqty": "1",
+                "fitemid": "9244",
+                "fnumber": "03.01.7020",
+                "fname": "CB06-2513-RM-SA3机身模块"
+            },
+            {
+                "levelId": "9244",
+                "finterid": "5964",
+                "fbomnumber": "BOM004825",
+                "fqty": "1",
+                "fitemid": "25072",
+                "fnumber": "04.07.0070",
+                "fname": "CB06-2513-RM-SA3"
+            },
+            {
+                "levelId": "2840",
+                "finterid": "4356",
+                "fbomnumber": "BOM003216",
+                "fqty": "1",
+                "fitemid": "2839",
+                "fnumber": "02.02.00290",
+                "fname": "横梁盖(喷塑7035)"
+            },
+            {
+                "levelId": "2839",
+                "finterid": "4319",
+                "fbomnumber": "BOM003180",
+                "fqty": "1",
+                "fitemid": "10061",
+                "fnumber": "03.21.0142",
+                "fname": "横梁组件"
+            },
+            {
+                "levelId": "10061",
+                "finterid": "4312",
+                "fbomnumber": "BOM003172",
+                "fqty": "1",
+                "fitemid": "9244",
+                "fnumber": "03.01.7020",
+                "fname": "CB06-2513-RM-SA3机身模块"
+            },
+            {
+                "levelId": "9244",
+                "finterid": "5964",
+                "fbomnumber": "BOM004825",
+                "fqty": "1",
+                "fitemid": "25072",
+                "fnumber": "04.07.0070",
+                "fname": "CB06-2513-RM-SA3"
+            },
+            {
+                "levelId": "2707",
+                "finterid": "2621",
+                "fbomnumber": "BOM001477",
+                "fqty": "1",
+                "fitemid": "2706",
+                "fnumber": "02.01.00320",
+                "fname": "压条(喷塑7035)"
+            },
+            {
+                "levelId": "2706",
+                "finterid": "2431",
+                "fbomnumber": "BOM001292",
+                "fqty": "1",
+                "fitemid": "10150",
+                "fnumber": "03.21.0224",
+                "fname": "压纸组件"
+            },
+            {
+                "levelId": "10150",
+                "finterid": "2759",
+                "fbomnumber": "BOM001618",
+                "fqty": "1",
+                "fitemid": "10145",
+                "fnumber": "03.21.0219",
+                "fname": "横梁组件"
+            },
+            {
+                "levelId": "10145",
+                "finterid": "1713",
+                "fbomnumber": "BOM000575",
+                "fqty": "1",
+                "fitemid": "9260",
+                "fnumber": "03.01.7029",
+                "fname": "CB08II-2516-RM-SA3机身模块"
+            },
+            {
+                "levelId": "10145",
+                "finterid": "2045",
+                "fbomnumber": "BOM000905",
+                "fqty": "1",
+                "fitemid": "9264",
+                "fnumber": "03.01.7031",
+                "fname": "CB08II-3116-RM-SA3机身模块"
+            },
+            {
+                "levelId": "10145",
+                "finterid": "4193",
+                "fbomnumber": "BOM003053",
+                "fqty": "1",
+                "fitemid": "9272",
+                "fnumber": "03.01.7028",
+                "fname": "CB08II-2516-PM-SA3机身模块"
+            },
+            {
+                "levelId": "10145",
+                "finterid": "5368",
+                "fbomnumber": "BOM004228",
+                "fqty": "1",
+                "fitemid": "22965",
+                "fnumber": "03.01.7034",
+                "fname": "CB08II-3516-PM-SA3机身模块"
+            },
+            {
+                "levelId": "10145",
+                "finterid": "5834",
+                "fbomnumber": "BOM004694",
+                "fqty": "1",
+                "fitemid": "24753",
+                "fnumber": "03.01.7045",
+                "fname": "CB08II-2516-PM-TA3机身模块"
+            },
+            {
+                "levelId": "10145",
+                "finterid": "6222",
+                "fbomnumber": "BOM005082",
+                "fqty": "1",
+                "fitemid": "25942",
+                "fnumber": "03.01.7052",
+                "fname": "CB08II-4516-PM-SA3机身模块"
+            },
+            {
+                "levelId": "10145",
+                "finterid": "6223",
+                "fbomnumber": "BOM005083",
+                "fqty": "1",
+                "fitemid": "25944",
+                "fnumber": "03.01.7053",
+                "fname": "CB08II-5516-PM-SA3机身模块"
+            },
+            {
+                "levelId": "24753",
+                "finterid": "5836",
+                "fbomnumber": "BOM004696",
+                "fqty": "1",
+                "fitemid": "20013",
+                "fnumber": "04.07.1320",
+                "fname": "CB08II-2516-PM-TA3"
+            },
+            {
+                "levelId": "22965",
+                "finterid": "5402",
+                "fbomnumber": "BOM004262",
+                "fqty": "1",
+                "fitemid": "20021",
+                "fnumber": "04.07.1810",
+                "fname": "CB08II-3516-PM-SA3"
+            },
+            {
+                "levelId": "9272",
+                "finterid": "4925",
+                "fbomnumber": "BOM003785",
+                "fqty": "1",
+                "fitemid": "10545",
+                "fnumber": "04.07.1310",
+                "fname": "CB08II-2516-PM-SA3"
+            },
+            {
+                "levelId": "9264",
+                "finterid": "4315",
+                "fbomnumber": "BOM003175",
+                "fqty": "1",
+                "fitemid": "10551",
+                "fnumber": "04.07.1710",
+                "fname": "CB08II-3116-RM-SA3"
+            },
+            {
+                "levelId": "9260",
+                "finterid": "4240",
+                "fbomnumber": "BOM003173",
+                "fqty": "1",
+                "fitemid": "10547",
+                "fnumber": "04.07.1410",
+                "fname": "CB08II-2516-RM-SA3"
+            },
+            {
+                "levelId": "3998",
+                "finterid": "4206",
+                "fbomnumber": "BOM003066",
+                "fqty": "1",
+                "fitemid": "3997",
+                "fnumber": "02.04.01070",
+                "fname": "压条(喷塑7035)"
+            },
+            {
+                "levelId": "3997",
+                "finterid": "4191",
+                "fbomnumber": "BOM003052",
+                "fqty": "1",
+                "fitemid": "10066",
+                "fnumber": "03.21.0147",
+                "fname": "横梁组件"
+            },
+            {
+                "levelId": "10066",
+                "finterid": "4098",
+                "fbomnumber": "BOM003028",
+                "fqty": "1",
+                "fitemid": "9246",
+                "fnumber": "03.01.7021",
+                "fname": "CB06-2517-RM-SA3机身模块"
+            },
+            {
+                "levelId": "9246",
+                "finterid": "5962",
+                "fbomnumber": "BOM004823",
+                "fqty": "1",
+                "fitemid": "24908",
+                "fnumber": "04.07.0060",
+                "fname": "CB06-2517-RM-SA3"
+            },
+            {
+                "levelId": "3906",
+                "finterid": "4179",
+                "fbomnumber": "BOM003041",
+                "fqty": "1",
+                "fitemid": "3905",
+                "fnumber": "02.04.00600",
+                "fname": "压条(喷塑4469)"
+            },
+            {
+                "levelId": "3905",
+                "finterid": "4160",
+                "fbomnumber": "BOM003022",
+                "fqty": "1",
+                "fitemid": "9924",
+                "fnumber": "03.21.0008",
+                "fname": "横梁组件"
+            },
+            {
+                "levelId": "3905",
+                "finterid": "4244",
+                "fbomnumber": "BOM003104",
+                "fqty": "1",
+                "fitemid": "10004",
+                "fnumber": "03.21.0087",
+                "fname": "横梁组件"
+            },
+            {
+                "levelId": "3905",
+                "finterid": "5566",
+                "fbomnumber": "BOM004426",
+                "fqty": "1",
+                "fitemid": "23804",
+                "fnumber": "03.21.0356",
+                "fname": "横梁组件"
+            },
+            {
+                "levelId": "23804",
+                "finterid": "5997",
+                "fbomnumber": "BOM004856",
+                "fqty": "1",
+                "fitemid": "23798",
+                "fnumber": "03.01.5004",
+                "fname": "BK02-2516-RM-SB2机身模块"
+            },
+            {
+                "levelId": "23804",
+                "finterid": "6415",
+                "fbomnumber": "BOM005281",
+                "fqty": "1",
+                "fitemid": "26701",
+                "fnumber": "03.01.5003",
+                "fname": "BK02-2516-RM-SB3机身模块"
+            },
+            {
+                "levelId": "26701",
+                "finterid": "6422",
+                "fbomnumber": "BOM005282",
+                "fqty": "1",
+                "fitemid": "26601",
+                "fnumber": "04.05.0730",
+                "fname": "BK02-2516-RM-SB3"
+            },
+            {
+                "levelId": "23798",
+                "finterid": "5718",
+                "fbomnumber": "BOM004578",
+                "fqty": "1",
+                "fitemid": "24177",
+                "fnumber": "04.05.0710",
+                "fname": "BK02-2516-RM-SB2"
+            },
+            {
+                "levelId": "10004",
+                "finterid": "4208",
+                "fbomnumber": "BOM003100",
+                "fqty": "1",
+                "fitemid": "9286",
+                "fnumber": "03.01.6003",
+                "fname": "FH03-2517-RM-SA3机身模块"
+            },
+            {
+                "levelId": "10004",
+                "finterid": "4476",
+                "fbomnumber": "BOM003336",
+                "fqty": "1",
+                "fitemid": "9216",
+                "fnumber": "03.01.7006",
+                "fname": "CB03-2517-RM-SA3机身模块"
+            },
+            {
+                "levelId": "10004",
+                "finterid": "5428",
+                "fbomnumber": "BOM004288",
+                "fqty": "1",
+                "fitemid": "23244",
+                "fnumber": "03.01.6004",
+                "fname": "FH03-2517-RQ-SA3机身模块"
+            },
+            {
+                "levelId": "10004",
+                "finterid": "6345",
+                "fbomnumber": "BOM005205",
+                "fqty": "1",
+                "fitemid": "26300",
+                "fnumber": "03.01.6016",
+                "fname": "FH-2517-RM-SA3机身模块"
+            },
+            {
+                "levelId": "23244",
+                "finterid": "5433",
+                "fbomnumber": "BOM004298",
+                "fqty": "1",
+                "fitemid": "23278",
+                "fnumber": "04.06.0030",
+                "fname": "FH03-2517-RQ-SA3"
+            },
+            {
+                "levelId": "9216",
+                "finterid": "4323",
+                "fbomnumber": "BOM003184",
+                "fqty": "1",
+                "fitemid": "10471",
+                "fnumber": "04.07.0010",
+                "fname": "CB03-2517-RM-SA3"
+            },
+            {
+                "levelId": "9286",
+                "finterid": "5362",
+                "fbomnumber": "BOM004223",
+                "fqty": "1",
+                "fitemid": "19909",
+                "fnumber": "04.06.0010",
+                "fname": "FH03-2517-RM-SA3"
+            },
+            {
+                "levelId": "9924",
+                "finterid": "4141",
+                "fbomnumber": "BOM003002",
+                "fqty": "1",
+                "fitemid": "9198",
+                "fnumber": "03.01.5005",
+                "fname": "BK-2517-RM-SA3机身模块"
+            },
+            {
+                "levelId": "9198",
+                "finterid": "4814",
+                "fbomnumber": "BOM003674",
+                "fqty": "1",
+                "fitemid": "10415",
+                "fnumber": "04.05.0010",
+                "fname": "BK03-2517-RM-SA3"
+            },
+            {
+                "levelId": "2680",
+                "finterid": "4146",
+                "fbomnumber": "BOM003007",
+                "fqty": "1",
+                "fitemid": "2679",
+                "fnumber": "02.01.00050",
+                "fname": "压条(喷塑4469)"
+            },
+            {
+                "levelId": "2679",
+                "finterid": "4110",
+                "fbomnumber": "BOM002979",
+                "fqty": "1",
+                "fitemid": "9995",
+                "fnumber": "03.21.0078",
+                "fname": "横梁组件"
+            },
+            {
+                "levelId": "9995",
+                "finterid": "3790",
+                "fbomnumber": "BOM002959",
+                "fqty": "1",
+                "fitemid": "9212",
+                "fnumber": "03.01.7004",
+                "fname": "CB03-2513W-RM-SA3机身模块"
+            },
+            {
+                "levelId": "9212",
+                "finterid": "6043",
+                "fbomnumber": "BOM004904",
+                "fqty": "1",
+                "fitemid": "25139",
+                "fnumber": "04.07.0006",
+                "fname": "CB03-2513W-RM-SA3"
+            },
+            {
+                "levelId": "2749",
+                "finterid": "3398",
+                "fbomnumber": "BOM002259",
+                "fqty": "1",
+                "fitemid": "2748",
+                "fnumber": "02.01.00600",
+                "fname": "调节杆-CB03(普通本色氧化)"
+            },
+            {
+                "levelId": "2748",
+                "finterid": "3378",
+                "fbomnumber": "BOM002242",
+                "fqty": "1",
+                "fitemid": "11059",
+                "fnumber": "03.23.0002",
+                "fname": "CB03吸尘组件"
+            },
+            {
+                "levelId": "11059",
+                "finterid": "4280",
+                "fbomnumber": "BOM003145",
+                "fqty": "1",
+                "fitemid": "9768",
+                "fnumber": "03.06.0019",
+                "fname": "CB03高频铣刀模块(美的吸尘器)"
+            },
+            {
+                "levelId": "11059",
+                "finterid": "5824",
+                "fbomnumber": "BOM004683",
+                "fqty": "1",
+                "fitemid": "24689",
+                "fnumber": "03.06.0087",
+                "fname": "CB03高频铣刀模块(进口吸尘器)"
+            },
+            {
+                "levelId": "8251",
+                "finterid": "3366",
+                "fbomnumber": "BOM002226",
+                "fqty": "1",
+                "fitemid": "8250",
+                "fnumber": "02.27.00330",
+                "fname": "压痕套(普通本色氧化)"
+            },
+            {
+                "levelId": "8250",
+                "finterid": "3365",
+                "fbomnumber": "BOM002225",
+                "fqty": "1",
+                "fitemid": "9778",
+                "fnumber": "03.06.0024",
+                "fname": "CB03压痕工具模块"
+            },
+            {
+                "levelId": "9778",
+                "finterid": "5078",
+                "fbomnumber": "BOM003938",
+                "fqty": "1",
+                "fitemid": "21536",
+                "fnumber": "03.36.0007",
+                "fname": "CB03-RM B(包装)行业工具标准配置"
+            },
+            {
+                "levelId": "9778",
+                "finterid": "5085",
+                "fbomnumber": "BOM003945",
+                "fqty": "1",
+                "fitemid": "21539",
+                "fnumber": "03.36.0010",
+                "fname": "CB03 B(包装)行业工具标准配置"
+            },
+            {
+                "levelId": "4105",
+                "finterid": "2818",
+                "fbomnumber": "BOM001676",
+                "fqty": "1",
+                "fitemid": "10232",
+                "fnumber": "03.21.0305",
+                "fname": "平台组件"
+            },
+            {
+                "levelId": "10232",
+                "finterid": "2807",
+                "fbomnumber": "BOM001665",
+                "fqty": "1",
+                "fitemid": "9346",
+                "fnumber": "03.01.4003",
+                "fname": "RC03-1509-SB2机身模块"
+            },
+            {
+                "levelId": "9346",
+                "finterid": "4421",
+                "fbomnumber": "BOM003282",
+                "fqty": "1",
+                "fitemid": "10407",
+                "fnumber": "04.04.0210",
+                "fname": "RC03-1509-SB2"
+            },
+            {
+                "levelId": "9346",
+                "finterid": "5443",
+                "fbomnumber": "BOM004303",
+                "fqty": "1",
+                "fitemid": "19897",
+                "fnumber": "04.04.0330",
+                "fname": "RC03-1509-EB2(双气泵)"
+            },
+            {
+                "levelId": "2710",
+                "finterid": "2813",
+                "fbomnumber": "BOM001671",
+                "fqty": "1",
+                "fitemid": "2709",
+                "fnumber": "02.01.00360",
+                "fname": "压条(喷塑7035)"
+            },
+            {
+                "levelId": "2709",
+                "finterid": "2800",
+                "fbomnumber": "BOM001663",
+                "fqty": "1",
+                "fitemid": "10029",
+                "fnumber": "03.21.0112",
+                "fname": "横梁组件"
+            },
+            {
+                "levelId": "10029",
+                "finterid": "2571",
+                "fbomnumber": "BOM001430",
+                "fqty": "1",
+                "fitemid": "9228",
+                "fnumber": "03.01.7012",
+                "fname": "CB03II-2513-RM-SA3机身模块"
+            },
+            {
+                "levelId": "10029",
+                "finterid": "4455",
+                "fbomnumber": "BOM003315",
+                "fqty": "1",
+                "fitemid": "17665",
+                "fnumber": "03.01.6006",
+                "fname": "FH03II-2513-RM-SA3机身模块"
+            },
+            {
+                "levelId": "10029",
+                "finterid": "5887",
+                "fbomnumber": "BOM004748",
+                "fqty": "1",
+                "fitemid": "24916",
+                "fnumber": "03.01.5013",
+                "fname": "BK03II-2513-RM-SA3机身模块"
+            },
+            {
+                "levelId": "24916",
+                "finterid": "5891",
+                "fbomnumber": "BOM004751",
+                "fqty": "1",
+                "fitemid": "19907",
+                "fnumber": "04.05.0410",
+                "fname": "BK03II-2513-RM-SA3"
+            },
+            {
+                "levelId": "17665",
+                "finterid": "4321",
+                "fbomnumber": "BOM003182",
+                "fqty": "1",
+                "fitemid": "10565",
+                "fnumber": "04.06.0310",
+                "fname": "FH03II-2513-RM-SA3"
+            },
+            {
+                "levelId": "9228",
+                "finterid": "1535",
+                "fbomnumber": "BOM000397",
+                "fqty": "1",
+                "fitemid": "10499",
+                "fnumber": "04.07.0520",
+                "fname": "CB03II-2513-RM-SA3"
+            },
+            {
+                "levelId": "4284",
+                "finterid": "2594",
+                "fbomnumber": "BOM001465",
+                "fqty": "1",
+                "fitemid": "4283",
+                "fnumber": "02.04.02290",
+                "fname": "Y光藕片(普通本色氧化)"
+            },
+            {
+                "levelId": "4283",
+                "finterid": "2418",
+                "fbomnumber": "BOM001285",
+                "fqty": "1",
+                "fitemid": "10149",
+                "fnumber": "03.21.0223",
+                "fname": "垫板组件"
+            },
+            {
+                "levelId": "10149",
+                "finterid": "2037",
+                "fbomnumber": "BOM000898",
+                "fqty": "1",
+                "fitemid": "10131",
+                "fnumber": "03.21.0205",
+                "fname": "横梁组件"
+            },
+            {
+                "levelId": "10149",
+                "finterid": "2759",
+                "fbomnumber": "BOM001618",
+                "fqty": "1",
+                "fitemid": "10145",
+                "fnumber": "03.21.0219",
+                "fname": "横梁组件"
+            },
+            {
+                "levelId": "10149",
+                "finterid": "5188",
+                "fbomnumber": "BOM004047",
+                "fqty": "1",
+                "fitemid": "22570",
+                "fnumber": "03.21.0341",
+                "fname": "横梁组件"
+            },
+            {
+                "levelId": "22570",
+                "finterid": "5181",
+                "fbomnumber": "BOM004040",
+                "fqty": "1",
+                "fitemid": "22462",
+                "fnumber": "03.01.7033",
+                "fname": "CB08II-2520-PM-SA3机身模块"
+            },
+            {
+                "levelId": "22570",
+                "finterid": "5205",
+                "fbomnumber": "BOM004069",
+                "fqty": "1",
+                "fitemid": "22427",
+                "fnumber": "03.01.7032",
+                "fname": "CB08II-3520-PM-SA3机身模块"
+            },
+            {
+                "levelId": "22427",
+                "finterid": "5226",
+                "fbomnumber": "BOM004087",
+                "fqty": "1",
+                "fitemid": "22429",
+                "fnumber": "04.07.2210",
+                "fname": "CB08II-3520-PM-SA3"
+            },
+            {
+                "levelId": "22462",
+                "finterid": "5155",
+                "fbomnumber": "BOM004068",
+                "fqty": "1",
+                "fitemid": "20015",
+                "fnumber": "04.07.1510",
+                "fname": "CB08II-2520-PM-SA3"
+            },
+            {
+                "levelId": "10145",
+                "finterid": "1713",
+                "fbomnumber": "BOM000575",
+                "fqty": "1",
+                "fitemid": "9260",
+                "fnumber": "03.01.7029",
+                "fname": "CB08II-2516-RM-SA3机身模块"
+            },
+            {
+                "levelId": "10145",
+                "finterid": "2045",
+                "fbomnumber": "BOM000905",
+                "fqty": "1",
+                "fitemid": "9264",
+                "fnumber": "03.01.7031",
+                "fname": "CB08II-3116-RM-SA3机身模块"
+            },
+            {
+                "levelId": "10145",
+                "finterid": "4193",
+                "fbomnumber": "BOM003053",
+                "fqty": "1",
+                "fitemid": "9272",
+                "fnumber": "03.01.7028",
+                "fname": "CB08II-2516-PM-SA3机身模块"
+            },
+            {
+                "levelId": "10145",
+                "finterid": "5368",
+                "fbomnumber": "BOM004228",
+                "fqty": "1",
+                "fitemid": "22965",
+                "fnumber": "03.01.7034",
+                "fname": "CB08II-3516-PM-SA3机身模块"
+            },
+            {
+                "levelId": "10145",
+                "finterid": "5834",
+                "fbomnumber": "BOM004694",
+                "fqty": "1",
+                "fitemid": "24753",
+                "fnumber": "03.01.7045",
+                "fname": "CB08II-2516-PM-TA3机身模块"
+            },
+            {
+                "levelId": "10145",
+                "finterid": "6222",
+                "fbomnumber": "BOM005082",
+                "fqty": "1",
+                "fitemid": "25942",
+                "fnumber": "03.01.7052",
+                "fname": "CB08II-4516-PM-SA3机身模块"
+            },
+            {
+                "levelId": "10145",
+                "finterid": "6223",
+                "fbomnumber": "BOM005083",
+                "fqty": "1",
+                "fitemid": "25944",
+                "fnumber": "03.01.7053",
+                "fname": "CB08II-5516-PM-SA3机身模块"
+            },
+            {
+                "levelId": "24753",
+                "finterid": "5836",
+                "fbomnumber": "BOM004696",
+                "fqty": "1",
+                "fitemid": "20013",
+                "fnumber": "04.07.1320",
+                "fname": "CB08II-2516-PM-TA3"
+            },
+            {
+                "levelId": "22965",
+                "finterid": "5402",
+                "fbomnumber": "BOM004262",
+                "fqty": "1",
+                "fitemid": "20021",
+                "fnumber": "04.07.1810",
+                "fname": "CB08II-3516-PM-SA3"
+            },
+            {
+                "levelId": "9272",
+                "finterid": "4925",
+                "fbomnumber": "BOM003785",
+                "fqty": "1",
+                "fitemid": "10545",
+                "fnumber": "04.07.1310",
+                "fname": "CB08II-2516-PM-SA3"
+            },
+            {
+                "levelId": "9264",
+                "finterid": "4315",
+                "fbomnumber": "BOM003175",
+                "fqty": "1",
+                "fitemid": "10551",
+                "fnumber": "04.07.1710",
+                "fname": "CB08II-3116-RM-SA3"
+            },
+            {
+                "levelId": "9260",
+                "finterid": "4240",
+                "fbomnumber": "BOM003173",
+                "fqty": "1",
+                "fitemid": "10547",
+                "fnumber": "04.07.1410",
+                "fname": "CB08II-2516-RM-SA3"
+            },
+            {
+                "levelId": "10131",
+                "finterid": "1800",
+                "fbomnumber": "BOM000864",
+                "fqty": "1",
+                "fitemid": "9262",
+                "fnumber": "03.01.7030",
+                "fname": "CB08II-3032-RM-SA3机身模块"
+            },
+            {
+                "levelId": "9262",
+                "finterid": "4316",
+                "fbomnumber": "BOM003178",
+                "fqty": "1",
+                "fitemid": "12126",
+                "fnumber": "04.07.1610",
+                "fname": "CB08II-3032-RM-SA3"
+            },
+            {
+                "levelId": "2719",
+                "finterid": "2095",
+                "fbomnumber": "BOM000954",
+                "fqty": "1",
+                "fitemid": "11922",
+                "fnumber": "02.01.00420",
+                "fname": "压条(喷塑7035)"
+            },
+            {
+                "levelId": "11922",
+                "finterid": "2071",
+                "fbomnumber": "BOM000931",
+                "fqty": "1",
+                "fitemid": "10133",
+                "fnumber": "03.21.0207",
+                "fname": "压纸组件"
+            },
+            {
+                "levelId": "10133",
+                "finterid": "2037",
+                "fbomnumber": "BOM000898",
+                "fqty": "2",
+                "fitemid": "10131",
+                "fnumber": "03.21.0205",
+                "fname": "横梁组件"
+            },
+            {
+                "levelId": "10131",
+                "finterid": "1800",
+                "fbomnumber": "BOM000864",
+                "fqty": "1",
+                "fitemid": "9262",
+                "fnumber": "03.01.7030",
+                "fname": "CB08II-3032-RM-SA3机身模块"
+            },
+            {
+                "levelId": "9262",
+                "finterid": "4316",
+                "fbomnumber": "BOM003178",
+                "fqty": "1",
+                "fitemid": "12126",
+                "fnumber": "04.07.1610",
+                "fname": "CB08II-3032-RM-SA3"
+            },
+            {
+                "levelId": "4438",
+                "finterid": "1778",
+                "fbomnumber": "BOM000640",
+                "fqty": "1",
+                "fitemid": "4437",
+                "fnumber": "02.04.02930",
+                "fname": "压条(喷塑米黄色1021)"
+            },
+            {
+                "levelId": "4437",
+                "finterid": "1572",
+                "fbomnumber": "BOM000438",
+                "fqty": "1",
+                "fitemid": "10072",
+                "fnumber": "03.21.0153",
+                "fname": "横梁组件"
+            },
+            {
+                "levelId": "10072",
+                "finterid": "1543",
+                "fbomnumber": "BOM000407",
+                "fqty": "1",
+                "fitemid": "9248",
+                "fnumber": "03.01.7022",
+                "fname": "CB06D-2513-RM-SA3机身模块"
+            },
+            {
+                "levelId": "9248",
+                "finterid": "4447",
+                "fbomnumber": "BOM003307",
+                "fqty": "1",
+                "fitemid": "10525",
+                "fnumber": "04.07.1010",
+                "fname": "CB06D-2513-RM-SA3"
+            },
+            {
+                "levelId": "4530",
+                "finterid": "1795",
+                "fbomnumber": "BOM000657",
+                "fqty": "1",
+                "fitemid": "4529",
+                "fnumber": "02.04.03440",
+                "fname": "压条(喷塑7035)"
+            },
+            {
+                "levelId": "4529",
+                "finterid": "1562",
+                "fbomnumber": "BOM000426",
+                "fqty": "1",
+                "fitemid": "10087",
+                "fnumber": "03.21.0165",
+                "fname": "横梁组件"
+            },
+            {
+                "levelId": "10087",
+                "finterid": "1545",
+                "fbomnumber": "BOM000408",
+                "fqty": "1",
+                "fitemid": "9250",
+                "fnumber": "03.01.7023",
+                "fname": "CB06DII-2516-RM-SA3机身模块"
+            },
+            {
+                "levelId": "9250",
+                "finterid": "4448",
+                "fbomnumber": "BOM003308",
+                "fqty": "1",
+                "fitemid": "10529",
+                "fnumber": "04.07.1110",
+                "fname": "CB06DII-2516-RM-SA3"
+            },
+            {
+                "levelId": "4536",
+                "finterid": "1661",
+                "fbomnumber": "BOM000523",
+                "fqty": "1",
+                "fitemid": "4535",
+                "fnumber": "02.04.03460",
+                "fname": "垫板(普通本色氧化)"
+            },
+            {
+                "levelId": "4535",
+                "finterid": "1562",
+                "fbomnumber": "BOM000426",
+                "fqty": "2",
+                "fitemid": "10087",
+                "fnumber": "03.21.0165",
+                "fname": "横梁组件"
+            },
+            {
+                "levelId": "10087",
+                "finterid": "1545",
+                "fbomnumber": "BOM000408",
+                "fqty": "1",
+                "fitemid": "9250",
+                "fnumber": "03.01.7023",
+                "fname": "CB06DII-2516-RM-SA3机身模块"
+            },
+            {
+                "levelId": "9250",
+                "finterid": "4448",
+                "fbomnumber": "BOM003308",
+                "fqty": "1",
+                "fitemid": "10529",
+                "fnumber": "04.07.1110",
+                "fname": "CB06DII-2516-RM-SA3"
+            },
+            {
+                "levelId": "2715",
+                "finterid": "1529",
+                "fbomnumber": "BOM000392",
+                "fqty": "1",
+                "fitemid": "2714",
+                "fnumber": "02.01.00400",
+                "fname": "压条(喷塑7035)"
+            },
+            {
+                "levelId": "2714",
+                "finterid": "1525",
+                "fbomnumber": "BOM000388",
+                "fqty": "1",
+                "fitemid": "10053",
+                "fnumber": "03.21.0135",
+                "fname": "横梁组件"
+            },
+            {
+                "levelId": "10053",
+                "finterid": "1526",
+                "fbomnumber": "BOM000389",
+                "fqty": "1",
+                "fitemid": "9236",
+                "fnumber": "03.01.7016",
+                "fname": "CB03II-3020-RM-SA3机身模块"
+            },
+            {
+                "levelId": "10053",
+                "finterid": "4457",
+                "fbomnumber": "BOM003317",
+                "fqty": "1",
+                "fitemid": "17667",
+                "fnumber": "03.01.6007",
+                "fname": "FH03II-3020-RM-SA3机身模块"
+            },
+            {
+                "levelId": "10053",
+                "finterid": "5713",
+                "fbomnumber": "BOM004581",
+                "fqty": "1",
+                "fitemid": "24199",
+                "fnumber": "03.01.5011",
+                "fname": "BK03II-3020-RM-SA3机身模块"
+            },
+            {
+                "levelId": "10053",
+                "finterid": "6173",
+                "fbomnumber": "BOM005034",
+                "fqty": "1",
+                "fitemid": "25706",
+                "fnumber": "03.01.7051",
+                "fname": "CB03II-3020-SA1机身模块"
+            },
+            {
+                "levelId": "25706",
+                "finterid": "6180",
+                "fbomnumber": "BOM005039",
+                "fqty": "1",
+                "fitemid": "23527",
+                "fnumber": "04.07.0920",
+                "fname": "CB03II-3020-SA1"
+            },
+            {
+                "levelId": "24199",
+                "finterid": "5723",
+                "fbomnumber": "BOM004583",
+                "fqty": "1",
+                "fitemid": "24127",
+                "fnumber": "04.05.0610",
+                "fname": "BK03II-3020-RM-SA3"
+            },
+            {
+                "levelId": "17667",
+                "finterid": "4322",
+                "fbomnumber": "BOM003183",
+                "fqty": "1",
+                "fitemid": "17646",
+                "fnumber": "04.06.0610",
+                "fname": "FH03II-3020-RM-SA3"
+            },
+            {
+                "levelId": "9236",
+                "finterid": "3767",
+                "fbomnumber": "BOM002628",
+                "fqty": "1",
+                "fitemid": "10517",
+                "fnumber": "04.07.0810",
+                "fname": "CB03II-3020-RM-SA3"
+            },
+            {
+                "levelId": "3107",
+                "finterid": "1385",
+                "fbomnumber": "BOM000248",
+                "fqty": "1",
+                "fitemid": "3106",
+                "fnumber": "02.02.01220",
+                "fname": "封盖(普通黑色氧化)"
+            },
+            {
+                "levelId": "3106",
+                "finterid": "1427",
+                "fbomnumber": "BOM000290",
+                "fqty": "1",
+                "fitemid": "10256",
+                "fnumber": "03.22.0018",
+                "fname": "左机头"
+            },
+            {
+                "levelId": "3106",
+                "finterid": "1428",
+                "fbomnumber": "BOM000291",
+                "fqty": "1",
+                "fitemid": "10257",
+                "fnumber": "03.22.0019",
+                "fname": "右机头"
+            },
+            {
+                "levelId": "3106",
+                "finterid": "4654",
+                "fbomnumber": "BOM003514",
+                "fqty": "1",
+                "fitemid": "10261",
+                "fnumber": "03.22.0022",
+                "fname": "CB06DII左机头"
+            },
+            {
+                "levelId": "3106",
+                "finterid": "4655",
+                "fbomnumber": "BOM003515",
+                "fqty": "1",
+                "fitemid": "10262",
+                "fnumber": "03.22.0023",
+                "fname": "CB06DII右机头"
+            },
+            {
+                "levelId": "3106",
+                "finterid": "6461",
+                "fbomnumber": "BOM005320",
+                "fqty": "1",
+                "fitemid": "27016",
+                "fnumber": "03.22.0063",
+                "fname": "左机头"
+            },
+            {
+                "levelId": "3106",
+                "finterid": "6462",
+                "fbomnumber": "BOM005321",
+                "fqty": "1",
+                "fitemid": "27017",
+                "fnumber": "03.22.0064",
+                "fname": "右机头"
+            },
+            {
+                "levelId": "27017",
+                "finterid": "6463",
+                "fbomnumber": "BOM005322",
+                "fqty": "1",
+                "fitemid": "26458",
+                "fnumber": "03.02.7014",
+                "fname": "CB03II双机头模块（商用版）"
+            },
+            {
+                "levelId": "26458",
+                "finterid": "6373",
+                "fbomnumber": "BOM005237",
+                "fqty": "1",
+                "fitemid": "26457",
+                "fnumber": "03.52.7010",
+                "fname": "CB03II双机头总成（商用版）"
+            },
+            {
+                "levelId": "26457",
+                "finterid": "6372",
+                "fbomnumber": "BOM005230",
+                "fqty": "1",
+                "fitemid": "26419",
+                "fnumber": "04.07.0640",
+                "fname": "CB03II-2516-RM01-SA3-商用板"
+            },
+            {
+                "levelId": "27016",
+                "finterid": "6463",
+                "fbomnumber": "BOM005322",
+                "fqty": "1",
+                "fitemid": "26458",
+                "fnumber": "03.02.7014",
+                "fname": "CB03II双机头模块（商用版）"
+            },
+            {
+                "levelId": "26458",
+                "finterid": "6373",
+                "fbomnumber": "BOM005237",
+                "fqty": "1",
+                "fitemid": "26457",
+                "fnumber": "03.52.7010",
+                "fname": "CB03II双机头总成（商用版）"
+            },
+            {
+                "levelId": "26457",
+                "finterid": "6372",
+                "fbomnumber": "BOM005230",
+                "fqty": "1",
+                "fitemid": "26419",
+                "fnumber": "04.07.0640",
+                "fname": "CB03II-2516-RM01-SA3-商用板"
+            },
+            {
+                "levelId": "10262",
+                "finterid": "4489",
+                "fbomnumber": "BOM003513",
+                "fqty": "1",
+                "fitemid": "9366",
+                "fnumber": "03.02.7004",
+                "fname": "CB06DII机头模块"
+            },
+            {
+                "levelId": "9366",
+                "finterid": "4446",
+                "fbomnumber": "BOM003306",
+                "fqty": "1",
+                "fitemid": "17659",
+                "fnumber": "03.52.7002",
+                "fname": "CB06DII机头总成"
+            },
+            {
+                "levelId": "17659",
+                "finterid": "4448",
+                "fbomnumber": "BOM003308",
+                "fqty": "1",
+                "fitemid": "10529",
+                "fnumber": "04.07.1110",
+                "fname": "CB06DII-2516-RM-SA3"
+            },
+            {
+                "levelId": "10261",
+                "finterid": "4489",
+                "fbomnumber": "BOM003513",
+                "fqty": "1",
+                "fitemid": "9366",
+                "fnumber": "03.02.7004",
+                "fname": "CB06DII机头模块"
+            },
+            {
+                "levelId": "9366",
+                "finterid": "4446",
+                "fbomnumber": "BOM003306",
+                "fqty": "1",
+                "fitemid": "17659",
+                "fnumber": "03.52.7002",
+                "fname": "CB06DII机头总成"
+            },
+            {
+                "levelId": "17659",
+                "finterid": "4448",
+                "fbomnumber": "BOM003308",
+                "fqty": "1",
+                "fitemid": "10529",
+                "fnumber": "04.07.1110",
+                "fname": "CB06DII-2516-RM-SA3"
+            },
+            {
+                "levelId": "10257",
+                "finterid": "1197",
+                "fbomnumber": "BOM000061",
+                "fqty": "1",
+                "fitemid": "9360",
+                "fnumber": "03.02.7001",
+                "fname": "CB03II双机头模块"
+            },
+            {
+                "levelId": "10257",
+                "finterid": "2801",
+                "fbomnumber": "BOM001660",
+                "fqty": "1",
+                "fitemid": "9372",
+                "fnumber": "03.02.7007",
+                "fname": "CB08II机头模块"
+            },
+            {
+                "levelId": "9372",
+                "finterid": "4433",
+                "fbomnumber": "BOM003293",
+                "fqty": "1",
+                "fitemid": "12136",
+                "fnumber": "03.52.7005",
+                "fname": "CB08II机头总成"
+            },
+            {
+                "levelId": "12136",
+                "finterid": "4240",
+                "fbomnumber": "BOM003173",
+                "fqty": "1",
+                "fitemid": "10547",
+                "fnumber": "04.07.1410",
+                "fname": "CB08II-2516-RM-SA3"
+            },
+            {
+                "levelId": "12136",
+                "finterid": "4315",
+                "fbomnumber": "BOM003175",
+                "fqty": "1",
+                "fitemid": "10551",
+                "fnumber": "04.07.1710",
+                "fname": "CB08II-3116-RM-SA3"
+            },
+            {
+                "levelId": "12136",
+                "finterid": "4316",
+                "fbomnumber": "BOM003178",
+                "fqty": "1",
+                "fitemid": "12126",
+                "fnumber": "04.07.1610",
+                "fname": "CB08II-3032-RM-SA3"
+            },
+            {
+                "levelId": "12136",
+                "finterid": "4925",
+                "fbomnumber": "BOM003785",
+                "fqty": "1",
+                "fitemid": "10545",
+                "fnumber": "04.07.1310",
+                "fname": "CB08II-2516-PM-SA3"
+            },
+            {
+                "levelId": "12136",
+                "finterid": "5155",
+                "fbomnumber": "BOM004068",
+                "fqty": "1",
+                "fitemid": "20015",
+                "fnumber": "04.07.1510",
+                "fname": "CB08II-2520-PM-SA3"
+            },
+            {
+                "levelId": "12136",
+                "finterid": "5226",
+                "fbomnumber": "BOM004087",
+                "fqty": "1",
+                "fitemid": "22429",
+                "fnumber": "04.07.2210",
+                "fname": "CB08II-3520-PM-SA3"
+            },
+            {
+                "levelId": "12136",
+                "finterid": "5402",
+                "fbomnumber": "BOM004262",
+                "fqty": "1",
+                "fitemid": "20021",
+                "fnumber": "04.07.1810",
+                "fname": "CB08II-3516-PM-SA3"
+            },
+            {
+                "levelId": "12136",
+                "finterid": "5836",
+                "fbomnumber": "BOM004696",
+                "fqty": "1",
+                "fitemid": "20013",
+                "fnumber": "04.07.1320",
+                "fname": "CB08II-2516-PM-TA3"
+            },
+            {
+                "levelId": "9360",
+                "finterid": "1205",
+                "fbomnumber": "BOM000067",
+                "fqty": "1",
+                "fitemid": "12081",
+                "fnumber": "03.52.7001",
+                "fname": "CB03II双机头总成"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "1468",
+                "fbomnumber": "BOM000371",
+                "fqty": "1",
+                "fitemid": "10513",
+                "fnumber": "04.07.0720",
+                "fname": "CB03II-2516-SA3"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "1535",
+                "fbomnumber": "BOM000397",
+                "fqty": "1",
+                "fitemid": "10499",
+                "fnumber": "04.07.0520",
+                "fname": "CB03II-2513-RM-SA3"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "2253",
+                "fbomnumber": "BOM001113",
+                "fqty": "1",
+                "fitemid": "10495",
+                "fnumber": "04.07.0130",
+                "fname": "CB03II-1113-SA3"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "2254",
+                "fbomnumber": "BOM001120",
+                "fqty": "1",
+                "fitemid": "12543",
+                "fnumber": "04.07.0320",
+                "fname": "CB03II-1816-SA3"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "2572",
+                "fbomnumber": "BOM001640",
+                "fqty": "1",
+                "fitemid": "10503",
+                "fnumber": "04.07.0430",
+                "fname": "CB03II-2513-SA3"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "2809",
+                "fbomnumber": "BOM001666",
+                "fqty": "1",
+                "fitemid": "12307",
+                "fnumber": "04.07.0610",
+                "fname": "CB03II-2516-RM-SA3"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "3767",
+                "fbomnumber": "BOM002628",
+                "fqty": "1",
+                "fitemid": "10517",
+                "fnumber": "04.07.0810",
+                "fname": "CB03II-3020-RM-SA3"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "4870",
+                "fbomnumber": "BOM003730",
+                "fqty": "1",
+                "fitemid": "18486",
+                "fnumber": "04.07.0910",
+                "fname": "CB03II-3020-SA3"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "5144",
+                "fbomnumber": "BOM004004",
+                "fqty": "1",
+                "fitemid": "19969",
+                "fnumber": "04.07.0220",
+                "fname": "CB03II-1816-RM-SA3"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "5435",
+                "fbomnumber": "BOM004294",
+                "fqty": "1",
+                "fitemid": "19975",
+                "fnumber": "04.07.0310",
+                "fname": "CB03II-1816-SA1"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "5438",
+                "fbomnumber": "BOM004297",
+                "fqty": "1",
+                "fitemid": "19957",
+                "fnumber": "04.07.0110",
+                "fname": "CB03II-1113-SA1"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "5441",
+                "fbomnumber": "BOM004301",
+                "fqty": "1",
+                "fitemid": "20059",
+                "fnumber": "04.07.0350",
+                "fname": "CB03II-1816-SA2"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "5446",
+                "fbomnumber": "BOM004306",
+                "fqty": "1",
+                "fitemid": "19959",
+                "fnumber": "04.07.0120",
+                "fname": "CB03II-1113-SA2"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "5497",
+                "fbomnumber": "BOM004357",
+                "fqty": "1",
+                "fitemid": "20005",
+                "fnumber": "04.07.0750",
+                "fname": "CB03II-2516-SA2"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "5529",
+                "fbomnumber": "BOM004390",
+                "fqty": "1",
+                "fitemid": "19999",
+                "fnumber": "04.07.0710",
+                "fname": "CB03II-2516-SA1"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "5813",
+                "fbomnumber": "BOM004672",
+                "fqty": "1",
+                "fitemid": "24629",
+                "fnumber": "04.07.0630",
+                "fname": "CB03II-2516-RM-SA4"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "5820",
+                "fbomnumber": "BOM004679",
+                "fqty": "1",
+                "fitemid": "19983",
+                "fnumber": "04.07.0420",
+                "fname": "CB03II-2513-SA2"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "5844",
+                "fbomnumber": "BOM004703",
+                "fqty": "1",
+                "fitemid": "19981",
+                "fnumber": "04.07.0410",
+                "fname": "CB03II-2513-SA1"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "6180",
+                "fbomnumber": "BOM005039",
+                "fqty": "1",
+                "fitemid": "23527",
+                "fnumber": "04.07.0920",
+                "fname": "CB03II-3020-SA1"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "6375",
+                "fbomnumber": "BOM005233",
+                "fqty": "1",
+                "fitemid": "23532",
+                "fnumber": "04.07.0930",
+                "fname": "CB03II-3020-SA2"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "6451",
+                "fbomnumber": "BOM005312",
+                "fqty": "1",
+                "fitemid": "26824",
+                "fnumber": "04.07.0370",
+                "fname": "CB03II-1816-EA1"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "6454",
+                "fbomnumber": "BOM005313",
+                "fqty": "1",
+                "fitemid": "26714",
+                "fnumber": "04.07.0170",
+                "fname": "CB03II-1113-EA1"
+            },
+            {
+                "levelId": "10256",
+                "finterid": "1197",
+                "fbomnumber": "BOM000061",
+                "fqty": "1",
+                "fitemid": "9360",
+                "fnumber": "03.02.7001",
+                "fname": "CB03II双机头模块"
+            },
+            {
+                "levelId": "10256",
+                "finterid": "2345",
+                "fbomnumber": "BOM001205",
+                "fqty": "1",
+                "fitemid": "9376",
+                "fnumber": "03.02.6002",
+                "fname": "FH03II机头模块"
+            },
+            {
+                "levelId": "10256",
+                "finterid": "2729",
+                "fbomnumber": "BOM001589",
+                "fqty": "1",
+                "fitemid": "9350",
+                "fnumber": "03.02.5001",
+                "fname": "BK03II机头模块"
+            },
+            {
+                "levelId": "10256",
+                "finterid": "2801",
+                "fbomnumber": "BOM001660",
+                "fqty": "1",
+                "fitemid": "9372",
+                "fnumber": "03.02.7007",
+                "fname": "CB08II机头模块"
+            },
+            {
+                "levelId": "9372",
+                "finterid": "4433",
+                "fbomnumber": "BOM003293",
+                "fqty": "1",
+                "fitemid": "12136",
+                "fnumber": "03.52.7005",
+                "fname": "CB08II机头总成"
+            },
+            {
+                "levelId": "12136",
+                "finterid": "4240",
+                "fbomnumber": "BOM003173",
+                "fqty": "1",
+                "fitemid": "10547",
+                "fnumber": "04.07.1410",
+                "fname": "CB08II-2516-RM-SA3"
+            },
+            {
+                "levelId": "12136",
+                "finterid": "4315",
+                "fbomnumber": "BOM003175",
+                "fqty": "1",
+                "fitemid": "10551",
+                "fnumber": "04.07.1710",
+                "fname": "CB08II-3116-RM-SA3"
+            },
+            {
+                "levelId": "12136",
+                "finterid": "4316",
+                "fbomnumber": "BOM003178",
+                "fqty": "1",
+                "fitemid": "12126",
+                "fnumber": "04.07.1610",
+                "fname": "CB08II-3032-RM-SA3"
+            },
+            {
+                "levelId": "12136",
+                "finterid": "4925",
+                "fbomnumber": "BOM003785",
+                "fqty": "1",
+                "fitemid": "10545",
+                "fnumber": "04.07.1310",
+                "fname": "CB08II-2516-PM-SA3"
+            },
+            {
+                "levelId": "12136",
+                "finterid": "5155",
+                "fbomnumber": "BOM004068",
+                "fqty": "1",
+                "fitemid": "20015",
+                "fnumber": "04.07.1510",
+                "fname": "CB08II-2520-PM-SA3"
+            },
+            {
+                "levelId": "12136",
+                "finterid": "5226",
+                "fbomnumber": "BOM004087",
+                "fqty": "1",
+                "fitemid": "22429",
+                "fnumber": "04.07.2210",
+                "fname": "CB08II-3520-PM-SA3"
+            },
+            {
+                "levelId": "12136",
+                "finterid": "5402",
+                "fbomnumber": "BOM004262",
+                "fqty": "1",
+                "fitemid": "20021",
+                "fnumber": "04.07.1810",
+                "fname": "CB08II-3516-PM-SA3"
+            },
+            {
+                "levelId": "12136",
+                "finterid": "5836",
+                "fbomnumber": "BOM004696",
+                "fqty": "1",
+                "fitemid": "20013",
+                "fnumber": "04.07.1320",
+                "fname": "CB08II-2516-PM-TA3"
+            },
+            {
+                "levelId": "9350",
+                "finterid": "4432",
+                "fbomnumber": "BOM003292",
+                "fqty": "1",
+                "fitemid": "12140",
+                "fnumber": "03.52.5001",
+                "fname": "BK03II机头总成"
+            },
+            {
+                "levelId": "9350",
+                "finterid": "5120",
+                "fbomnumber": "BOM003981",
+                "fqty": "1",
+                "fitemid": "21986",
+                "fnumber": "04.05.0330",
+                "fname": "BK03II-1816-RM-SA3"
+            },
+            {
+                "levelId": "12140",
+                "finterid": "3864",
+                "fbomnumber": "BOM002724",
+                "fqty": "1",
+                "fitemid": "12122",
+                "fnumber": "04.05.0210",
+                "fname": "BK03II-2516-RM-SA3"
+            },
+            {
+                "levelId": "12140",
+                "finterid": "4881",
+                "fbomnumber": "BOM003750",
+                "fqty": "1",
+                "fitemid": "18491",
+                "fnumber": "04.05.0310",
+                "fname": "BK03II-1816-SA3"
+            },
+            {
+                "levelId": "12140",
+                "finterid": "5723",
+                "fbomnumber": "BOM004583",
+                "fqty": "1",
+                "fitemid": "24127",
+                "fnumber": "04.05.0610",
+                "fname": "BK03II-3020-RM-SA3"
+            },
+            {
+                "levelId": "12140",
+                "finterid": "5839",
+                "fbomnumber": "BOM004706",
+                "fqty": "1",
+                "fitemid": "24795",
+                "fnumber": "04.05.0220",
+                "fname": "BK03II-2516-RM-TA3"
+            },
+            {
+                "levelId": "12140",
+                "finterid": "5891",
+                "fbomnumber": "BOM004751",
+                "fqty": "1",
+                "fitemid": "19907",
+                "fnumber": "04.05.0410",
+                "fname": "BK03II-2513-RM-SA3"
+            },
+            {
+                "levelId": "12140",
+                "finterid": "6206",
+                "fbomnumber": "BOM005067",
+                "fqty": "1",
+                "fitemid": "25231",
+                "fnumber": "04.05.0510",
+                "fname": "BK03II-1113-SA2"
+            },
+            {
+                "levelId": "12140",
+                "finterid": "6234",
+                "fbomnumber": "BOM005094",
+                "fqty": "1",
+                "fitemid": "26024",
+                "fnumber": "04.05.0230",
+                "fname": "BK03II-2516-SA3"
+            },
+            {
+                "levelId": "12140",
+                "finterid": "6237",
+                "fbomnumber": "BOM005096",
+                "fqty": "1",
+                "fitemid": "26034",
+                "fnumber": "04.05.0240",
+                "fname": "BK03II-2516-SA2"
+            },
+            {
+                "levelId": "9376",
+                "finterid": "4454",
+                "fbomnumber": "BOM003321",
+                "fqty": "1",
+                "fitemid": "12134",
+                "fnumber": "03.52.6001",
+                "fname": "FH03II机头总成"
+            },
+            {
+                "levelId": "12134",
+                "finterid": "4321",
+                "fbomnumber": "BOM003182",
+                "fqty": "1",
+                "fitemid": "10565",
+                "fnumber": "04.06.0310",
+                "fname": "FH03II-2513-RM-SA3"
+            },
+            {
+                "levelId": "12134",
+                "finterid": "4322",
+                "fbomnumber": "BOM003183",
+                "fqty": "1",
+                "fitemid": "17646",
+                "fnumber": "04.06.0610",
+                "fname": "FH03II-3020-RM-SA3"
+            },
+            {
+                "levelId": "12134",
+                "finterid": "5122",
+                "fbomnumber": "BOM003983",
+                "fqty": "1",
+                "fitemid": "21988",
+                "fnumber": "04.06.0250",
+                "fname": "FH03II-1816-RM-SA3"
+            },
+            {
+                "levelId": "12134",
+                "finterid": "5232",
+                "fbomnumber": "BOM004092",
+                "fqty": "1",
+                "fitemid": "19913",
+                "fnumber": "04.06.0110",
+                "fname": "FH03II-1816-RE-SA3"
+            },
+            {
+                "levelId": "12134",
+                "finterid": "5387",
+                "fbomnumber": "BOM004247",
+                "fqty": "1",
+                "fitemid": "19923",
+                "fnumber": "04.06.0410",
+                "fname": "FH03II-2513-SA3"
+            },
+            {
+                "levelId": "12134",
+                "finterid": "5389",
+                "fbomnumber": "BOM004249",
+                "fqty": "1",
+                "fitemid": "19927",
+                "fnumber": "04.06.0510",
+                "fname": "FH03II-2516-RM-SA3"
+            },
+            {
+                "levelId": "12134",
+                "finterid": "6072",
+                "fbomnumber": "BOM004932",
+                "fqty": "1",
+                "fitemid": "24241",
+                "fnumber": "04.06.0550",
+                "fname": "FH03II-2516-RQ-SA3"
+            },
+            {
+                "levelId": "12134",
+                "finterid": "6235",
+                "fbomnumber": "BOM005098",
+                "fqty": "1",
+                "fitemid": "19917",
+                "fnumber": "04.06.0210",
+                "fname": "FH03II-1816-SA3"
+            },
+            {
+                "levelId": "9360",
+                "finterid": "1205",
+                "fbomnumber": "BOM000067",
+                "fqty": "1",
+                "fitemid": "12081",
+                "fnumber": "03.52.7001",
+                "fname": "CB03II双机头总成"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "1468",
+                "fbomnumber": "BOM000371",
+                "fqty": "1",
+                "fitemid": "10513",
+                "fnumber": "04.07.0720",
+                "fname": "CB03II-2516-SA3"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "1535",
+                "fbomnumber": "BOM000397",
+                "fqty": "1",
+                "fitemid": "10499",
+                "fnumber": "04.07.0520",
+                "fname": "CB03II-2513-RM-SA3"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "2253",
+                "fbomnumber": "BOM001113",
+                "fqty": "1",
+                "fitemid": "10495",
+                "fnumber": "04.07.0130",
+                "fname": "CB03II-1113-SA3"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "2254",
+                "fbomnumber": "BOM001120",
+                "fqty": "1",
+                "fitemid": "12543",
+                "fnumber": "04.07.0320",
+                "fname": "CB03II-1816-SA3"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "2572",
+                "fbomnumber": "BOM001640",
+                "fqty": "1",
+                "fitemid": "10503",
+                "fnumber": "04.07.0430",
+                "fname": "CB03II-2513-SA3"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "2809",
+                "fbomnumber": "BOM001666",
+                "fqty": "1",
+                "fitemid": "12307",
+                "fnumber": "04.07.0610",
+                "fname": "CB03II-2516-RM-SA3"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "3767",
+                "fbomnumber": "BOM002628",
+                "fqty": "1",
+                "fitemid": "10517",
+                "fnumber": "04.07.0810",
+                "fname": "CB03II-3020-RM-SA3"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "4870",
+                "fbomnumber": "BOM003730",
+                "fqty": "1",
+                "fitemid": "18486",
+                "fnumber": "04.07.0910",
+                "fname": "CB03II-3020-SA3"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "5144",
+                "fbomnumber": "BOM004004",
+                "fqty": "1",
+                "fitemid": "19969",
+                "fnumber": "04.07.0220",
+                "fname": "CB03II-1816-RM-SA3"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "5435",
+                "fbomnumber": "BOM004294",
+                "fqty": "1",
+                "fitemid": "19975",
+                "fnumber": "04.07.0310",
+                "fname": "CB03II-1816-SA1"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "5438",
+                "fbomnumber": "BOM004297",
+                "fqty": "1",
+                "fitemid": "19957",
+                "fnumber": "04.07.0110",
+                "fname": "CB03II-1113-SA1"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "5441",
+                "fbomnumber": "BOM004301",
+                "fqty": "1",
+                "fitemid": "20059",
+                "fnumber": "04.07.0350",
+                "fname": "CB03II-1816-SA2"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "5446",
+                "fbomnumber": "BOM004306",
+                "fqty": "1",
+                "fitemid": "19959",
+                "fnumber": "04.07.0120",
+                "fname": "CB03II-1113-SA2"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "5497",
+                "fbomnumber": "BOM004357",
+                "fqty": "1",
+                "fitemid": "20005",
+                "fnumber": "04.07.0750",
+                "fname": "CB03II-2516-SA2"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "5529",
+                "fbomnumber": "BOM004390",
+                "fqty": "1",
+                "fitemid": "19999",
+                "fnumber": "04.07.0710",
+                "fname": "CB03II-2516-SA1"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "5813",
+                "fbomnumber": "BOM004672",
+                "fqty": "1",
+                "fitemid": "24629",
+                "fnumber": "04.07.0630",
+                "fname": "CB03II-2516-RM-SA4"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "5820",
+                "fbomnumber": "BOM004679",
+                "fqty": "1",
+                "fitemid": "19983",
+                "fnumber": "04.07.0420",
+                "fname": "CB03II-2513-SA2"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "5844",
+                "fbomnumber": "BOM004703",
+                "fqty": "1",
+                "fitemid": "19981",
+                "fnumber": "04.07.0410",
+                "fname": "CB03II-2513-SA1"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "6180",
+                "fbomnumber": "BOM005039",
+                "fqty": "1",
+                "fitemid": "23527",
+                "fnumber": "04.07.0920",
+                "fname": "CB03II-3020-SA1"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "6375",
+                "fbomnumber": "BOM005233",
+                "fqty": "1",
+                "fitemid": "23532",
+                "fnumber": "04.07.0930",
+                "fname": "CB03II-3020-SA2"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "6451",
+                "fbomnumber": "BOM005312",
+                "fqty": "1",
+                "fitemid": "26824",
+                "fnumber": "04.07.0370",
+                "fname": "CB03II-1816-EA1"
+            },
+            {
+                "levelId": "12081",
+                "finterid": "6454",
+                "fbomnumber": "BOM005313",
+                "fqty": "1",
+                "fitemid": "26714",
+                "fnumber": "04.07.0170",
+                "fname": "CB03II-1113-EA1"
+            },
+            {
+                "levelId": "2701",
+                "finterid": "1414",
+                "fbomnumber": "BOM000277",
+                "fqty": "1",
+                "fitemid": "2700",
+                "fnumber": "02.01.00260",
+                "fname": "压条(喷塑7035)"
+            },
+            {
+                "levelId": "2700",
+                "finterid": "1421",
+                "fbomnumber": "BOM000284",
+                "fqty": "1",
+                "fitemid": "10043",
+                "fnumber": "03.21.0125",
+                "fname": "横梁组件"
+            },
+            {
+                "levelId": "2700",
+                "finterid": "6459",
+                "fbomnumber": "BOM005318",
+                "fqty": "1",
+                "fitemid": "27009",
+                "fnumber": "03.21.0372",
+                "fname": "横梁组件"
+            },
+            {
+                "levelId": "2700",
+                "finterid": "6470",
+                "fbomnumber": "BOM005329",
+                "fqty": "1",
+                "fitemid": "27085",
+                "fnumber": "03.21.0374",
+                "fname": "横梁组件(售后专用)"
+            },
+            {
+                "levelId": "27009",
+                "finterid": "6344",
+                "fbomnumber": "BOM005203",
+                "fqty": "1",
+                "fitemid": "26284",
+                "fnumber": "03.01.7054",
+                "fname": "CB03II-2516-RM01-SA3机身模块(商用板)"
+            },
+            {
+                "levelId": "26284",
+                "finterid": "6372",
+                "fbomnumber": "BOM005230",
+                "fqty": "1",
+                "fitemid": "26419",
+                "fnumber": "04.07.0640",
+                "fname": "CB03II-2516-RM01-SA3-商用板"
+            },
+            {
+                "levelId": "10043",
+                "finterid": "1190",
+                "fbomnumber": "BOM000055",
+                "fqty": "1",
+                "fitemid": "9232",
+                "fnumber": "03.01.7014",
+                "fname": "CB03II-2516-RM-SA3机身模块"
+            },
+            {
+                "levelId": "10043",
+                "finterid": "4435",
+                "fbomnumber": "BOM003294",
+                "fqty": "1",
+                "fitemid": "17652",
+                "fnumber": "03.01.5002",
+                "fname": "BK03II-2516-RM-SA3机身模块"
+            },
+            {
+                "levelId": "10043",
+                "finterid": "5369",
+                "fbomnumber": "BOM004244",
+                "fqty": "1",
+                "fitemid": "23073",
+                "fnumber": "03.01.6010",
+                "fname": "FH03II-2516-RM-SA3机身模块"
+            },
+            {
+                "levelId": "10043",
+                "finterid": "5811",
+                "fbomnumber": "BOM004670",
+                "fqty": "1",
+                "fitemid": "24631",
+                "fnumber": "03.01.7043",
+                "fname": "CB03II-2516-RM-SA4机身模块"
+            },
+            {
+                "levelId": "10043",
+                "finterid": "5848",
+                "fbomnumber": "BOM004707",
+                "fqty": "1",
+                "fitemid": "24807",
+                "fnumber": "03.01.5012",
+                "fname": "BK03II-2516-RM-TA3机身模块"
+            },
+            {
+                "levelId": "10043",
+                "finterid": "6059",
+                "fbomnumber": "BOM004929",
+                "fqty": "1",
+                "fitemid": "25566",
+                "fnumber": "03.01.6013",
+                "fname": "FH03II-2516-RQ-SA3机身模块"
+            },
+            {
+                "levelId": "25566",
+                "finterid": "6072",
+                "fbomnumber": "BOM004932",
+                "fqty": "1",
+                "fitemid": "24241",
+                "fnumber": "04.06.0550",
+                "fname": "FH03II-2516-RQ-SA3"
+            },
+            {
+                "levelId": "24807",
+                "finterid": "5839",
+                "fbomnumber": "BOM004706",
+                "fqty": "1",
+                "fitemid": "24795",
+                "fnumber": "04.05.0220",
+                "fname": "BK03II-2516-RM-TA3"
+            },
+            {
+                "levelId": "24631",
+                "finterid": "5813",
+                "fbomnumber": "BOM004672",
+                "fqty": "1",
+                "fitemid": "24629",
+                "fnumber": "04.07.0630",
+                "fname": "CB03II-2516-RM-SA4"
+            },
+            {
+                "levelId": "23073",
+                "finterid": "5389",
+                "fbomnumber": "BOM004249",
+                "fqty": "1",
+                "fitemid": "19927",
+                "fnumber": "04.06.0510",
+                "fname": "FH03II-2516-RM-SA3"
+            },
+            {
+                "levelId": "17652",
+                "finterid": "3864",
+                "fbomnumber": "BOM002724",
+                "fqty": "1",
+                "fitemid": "12122",
+                "fnumber": "04.05.0210",
+                "fname": "BK03II-2516-RM-SA3"
+            },
+            {
+                "levelId": "9232",
+                "finterid": "2809",
+                "fbomnumber": "BOM001666",
+                "fqty": "1",
+                "fitemid": "12307",
+                "fnumber": "04.07.0610",
+                "fname": "CB03II-2516-RM-SA3"
+            }
+
+    ];
+    $(document).ready(function () {
+        zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+    });
+
+/*
+    var setting = {
+        async: {
+            enable: true,//采用异步加载
+            dataFilter: ajaxDataFilter,    //预处理数据
+            url : "http://127.0.0.1/WeChat/admin/C01Action_listC01.action",
+            dataType : "json"
+        },
+        data : {
+            key : {
+                title : "c01name",
+                name : "c01name"
+            },
+            simpleData : {
+                enable : true,
+                idKey : "c01id",
+                pIdKey : "c01parentid",
+                rootPid : 000
+            }
+        },
+        callback : {
+            beforeClick: zTreeBeforeClick,
+            onClick : zTreeOnClick,
+            onAsyncSuccess: zTreeOnAsyncSuccess //异步加载完成调用
+        }
+    };
+
+    function zTreeBeforeClick(treeId, treeNode, clickFlag) {
+        return (treeNode.id !== 1);
+    };
+
+    function zTreeOnClick(event, treeId, treeNode) {
+        alert(treeNode.tId + ", " + treeNode.name);
+    };
+
+    */
+/* 获取返回的数据，进行预操作 *//*
+
+    function ajaxDataFilter(treeId, parentNode, responseData) {
+        responseData = responseData.jsonArray;
+        return responseData;
+    };
+    //异步加载完成时运行，此方法将所有的节点打开
+    function zTreeOnAsyncSuccess(event, treeId, msg) {
+        var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+        treeObj.expandAll(true);
+    }
+*/
+
+</script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+       <!--暂未使用-->
+
+       <!-- 调度业务对象 -->
+       <bean id="xxxxJob" class="com.parry.test.function.PublicTypeFunction" />
+       <!-- 调度业务 -->
+       <bean id="xxxxTask"
+             class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+              <property name="targetObject" ref="xxxxJob" />
+              <property name="targetMethod" value="xxxx" />
+       </bean>
+       <!-- 调度器触发器 每天早上07:00执行一次 -->
+       <bean id="xxxxTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+              <property name="jobDetail" ref="xxxxTask" />
+              <property name="cronExpression" value="0 13 09 * * ? *" />
+       </bean>
+       <!-- 设置调度 -->
+       <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+              <property name="triggers">
+                     <list>
+                            <!-- <ref bean="xxxxTrigger" /> -->
+                     </list>
+              </property>
+       </bean>
+
+
+</beans>
