@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jwei.sys.dao.SysMenuMapper">
+  <resultMap id="BaseResultMap" type="com.jwei.sys.entity.SysMenu">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="seq" jdbcType="TINYINT" property="seq" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="create_id" jdbcType="BIGINT" property="createId" />
+    <result column="create_name" jdbcType="VARCHAR" property="createName" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, description, url, type, icon, seq, parent_id, create_id, create_name, create_date
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_menu
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select distinct d.* from sys_user_role a LEFT JOIN sys_role b ON a.role_id=b.id
+    LEFT JOIN sys_role_menu c ON b.id = c.role_id
+    LEFT JOIN sys_menu d ON c.menu_id=d.id
+    where a.user_id = #{userId,jdbcType=BIGINT}
+    and d.type &lt; 3
+  </select>
+
+  <select id="selectAllUrl" resultType="java.lang.String">
+    select distinct url from sys_menu where type>1
+  </select>
+
+  <select id="selectAllMenu" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sys_menu
+  </select>
+
+  <select id="selectByPid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sys_menu
+    where parent_id = #{pid,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByNameOrUrl" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select top 1
+    <include refid="Base_Column_List" />
+    from sys_menu
+    where name = #{name,jdbcType=VARCHAR}
+    and url = #{url,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByRecursionId" parameterType="java.lang.Long">
+    with wyb as
+    (
+    select id from sys_menu where id = #{id,jdbcType=BIGINT}
+    UNION ALL
+    SELECT a.id FROM sys_menu a join wyb b on a.parent_id = b.id
+    )
+    delete sys_menu where id in (select * from wyb)
+  </delete>
+
+
+
+
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sys_menu
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.jwei.sys.entity.SysMenu">
+    insert into sys_menu (name, description,
+      url, type, icon, seq, 
+      parent_id, create_id, create_name, 
+      create_date)
+    values (#{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
+      #{url,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, #{icon,jdbcType=VARCHAR}, #{seq,jdbcType=TINYINT}, 
+      #{parentId,jdbcType=BIGINT}, #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jwei.sys.entity.SysMenu">
+    insert into sys_menu
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="icon != null">
+        icon,
+      </if>
+      <if test="seq != null">
+        seq,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="createId != null">
+        create_id,
+      </if>
+      <if test="createName != null">
+        create_name,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="icon != null">
+        #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="seq != null">
+        #{seq,jdbcType=TINYINT},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="createId != null">
+        #{createId,jdbcType=BIGINT},
+      </if>
+      <if test="createName != null">
+        #{createName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jwei.sys.entity.SysMenu">
+    update sys_menu
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="icon != null">
+        icon = #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="seq != null">
+        seq = #{seq,jdbcType=TINYINT},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="createId != null">
+        create_id = #{createId,jdbcType=BIGINT},
+      </if>
+      <if test="createName != null">
+        create_name = #{createName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jwei.sys.entity.SysMenu">
+    update sys_menu
+    set name = #{name,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      type = #{type,jdbcType=TINYINT},
+      icon = #{icon,jdbcType=VARCHAR},
+      seq = #{seq,jdbcType=TINYINT},
+      parent_id = #{parentId,jdbcType=BIGINT},
+      create_id = #{createId,jdbcType=BIGINT},
+      create_name = #{createName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+</mapper>

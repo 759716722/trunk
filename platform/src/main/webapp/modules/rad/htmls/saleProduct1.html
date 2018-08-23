@@ -1,0 +1,58 @@
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            产品搜索
+        </h3>
+    </div>
+
+    <div class="panel-body">
+        <div class="row">
+
+            <div class="col-sm-12 col-md-12">
+                <div >
+                    <textarea class="form-control" ng-model="searchData"></textarea>
+                </div>
+            </div>
+
+            <div class="col-sm-12 col-md-12">
+                &nbsp;&nbsp;
+            </div>
+
+            <div class="col-sm-12 col-md-12">
+                <div class="form-group">
+                    <button class="btn btn-default" ng-click="search()">查询</button>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-condensed">
+                <caption>产品列表</caption>
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>类型</th>
+                    <th>行业</th>
+                    <th>型号</th>
+                    <th>描述</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="x in dataList">
+                    <td>{{x.rowNo}}</td>
+                    <td>{{x.type}}</td>
+                    <td>{{x.industry}}</td>
+                    <td>{{x.model}}</td>
+                    <td>{{x.modelDesc}}</td>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+
+</div>
+
+

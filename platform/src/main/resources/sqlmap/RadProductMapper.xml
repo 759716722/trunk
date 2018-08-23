@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jwei.rad.dao.RadProductMapper" >
+  <resultMap id="BaseResultMap" type="com.jwei.rad.entity.RadProduct" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="type_id" property="typeId" jdbcType="INTEGER" />
+    <result column="model" property="model" jdbcType="VARCHAR" />
+    <result column="industry" property="industry" jdbcType="INTEGER" />
+    <result column="model_desc" property="modelDesc" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_id" property="createId" jdbcType="BIGINT" />
+    <result column="create_name" property="createName" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="modify_id" property="modifyId" jdbcType="BIGINT" />
+    <result column="modify_name" property="modifyName" jdbcType="VARCHAR" />
+    <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, type_id, model, industry, model_desc, remark, create_id, create_name, create_date, 
+    modify_id, modify_name, modify_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from rad_product
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByIndustryAndModel" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from rad_product
+    where industry = #{industry,jdbcType=INTEGER}
+    and model = #{model,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectAllModel" resultType="java.lang.String" parameterType="java.lang.String" >
+    select distinct model from rad_product
+  </select>
+
+  <resultMap id="PageResultMap" type="java.util.HashMap" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="row_no" property="rowNo" jdbcType="INTEGER" />
+    <result column="type_id" property="typeId" jdbcType="INTEGER" />
+    <result column="model" property="model" jdbcType="VARCHAR" />
+    <result column="industry" property="industry" jdbcType="VARCHAR" />
+    <result column="model_desc" property="modelDesc" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="selectByPage" resultMap="PageResultMap">
+    select * from (
+    select row_number()over(order by id) row_no,<include refid="Base_Column_List" />
+    from rad_product
+    where 1=1
+    <if test="typeId != null">
+      and type_id = #{typeId,jdbcType=INTEGER}
+    </if>
+    <if test="industry != null">
+      and industry = #{industry,jdbcType=INTEGER}
+    </if>
+    <if test="model != null">
+      and model = #{model,jdbcType=VARCHAR}
+    </if>
+    ) a where row_no between ${start} and ${end}
+
+  </select>
+
+  <select id="countByPage" resultType="java.lang.Integer">
+    select count(*) from rad_product
+    where 1=1
+    <if test="typeId != null">
+      and type_id = #{typeId,jdbcType=INTEGER}
+    </if>
+    <if test="industry != null">
+      and industry = #{industry,jdbcType=INTEGER}
+    </if>
+    <if test="model != null">
+      and model = #{model,jdbcType=VARCHAR}
+    </if>
+
+  </select>
+
+  <select id="selectByAPI" resultMap="BaseResultMap">
+    select distinct a.* from rad_product a
+    <if test="configIds != null">
+      <foreach collection="configIds" item="id" open=", (" separator="intersect" close=" )b">
+        select product_id from rad_product_detail where config_value &lt;3 and config_id = #{id}
+      </foreach>
+    </if>
+    where 1=1
+    <if test="configIds != null">
+      and a.id=b.product_id
+    </if>
+    <if test="industryId != null">
+      and a.industry = #{industryId,jdbcType=INTEGER}
+    </if>
+    <if test="model != null">
+      and a.model = #{model,jdbcType=VARCHAR}
+    </if>
+
+  </select>
+
+
+
+
+
+
+
+
+
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from rad_product
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.jwei.rad.entity.RadProduct" >
+    insert into rad_product (type_id, model,
+      industry, model_desc, remark, 
+      create_id, create_name, create_date, 
+      modify_id, modify_name, modify_date
+      )
+    values (#{typeId,jdbcType=INTEGER}, #{model,jdbcType=VARCHAR},
+      #{industry,jdbcType=INTEGER}, #{modelDesc,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{modifyId,jdbcType=BIGINT}, #{modifyName,jdbcType=VARCHAR}, #{modifyDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jwei.rad.entity.RadProduct" >
+    insert into rad_product
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="typeId != null" >
+        type_id,
+      </if>
+      <if test="model != null" >
+        model,
+      </if>
+      <if test="industry != null" >
+        industry,
+      </if>
+      <if test="modelDesc != null" >
+        model_desc,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createId != null" >
+        create_id,
+      </if>
+      <if test="createName != null" >
+        create_name,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="modifyId != null" >
+        modify_id,
+      </if>
+      <if test="modifyName != null" >
+        modify_name,
+      </if>
+      <if test="modifyDate != null" >
+        modify_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="typeId != null" >
+        #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="model != null" >
+        #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="industry != null" >
+        #{industry,jdbcType=INTEGER},
+      </if>
+      <if test="modelDesc != null" >
+        #{modelDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=BIGINT},
+      </if>
+      <if test="createName != null" >
+        #{createName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyId != null" >
+        #{modifyId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyName != null" >
+        #{modifyName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyDate != null" >
+        #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jwei.rad.entity.RadProduct" >
+    update rad_product
+    <set >
+      <if test="typeId != null" >
+        type_id = #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="model != null" >
+        model = #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="industry != null" >
+        industry = #{industry,jdbcType=INTEGER},
+      </if>
+      <if test="modelDesc != null" >
+        model_desc = #{modelDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        create_id = #{createId,jdbcType=BIGINT},
+      </if>
+      <if test="createName != null" >
+        create_name = #{createName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyId != null" >
+        modify_id = #{modifyId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyName != null" >
+        modify_name = #{modifyName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyDate != null" >
+        modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jwei.rad.entity.RadProduct" >
+    update rad_product
+    set type_id = #{typeId,jdbcType=INTEGER},
+      model = #{model,jdbcType=VARCHAR},
+      industry = #{industry,jdbcType=INTEGER},
+      model_desc = #{modelDesc,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_id = #{createId,jdbcType=BIGINT},
+      create_name = #{createName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modify_id = #{modifyId,jdbcType=BIGINT},
+      modify_name = #{modifyName,jdbcType=VARCHAR},
+      modify_date = #{modifyDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

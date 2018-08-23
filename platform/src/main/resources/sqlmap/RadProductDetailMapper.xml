@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jwei.rad.dao.RadProductDetailMapper">
+  <resultMap id="BaseResultMap" type="com.jwei.rad.entity.RadProductDetail">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="config_id" jdbcType="INTEGER" property="configId" />
+    <result column="config_value" jdbcType="TINYINT" property="configValue" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, product_id, config_id, config_value
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from rad_product_detail
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByProductId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from rad_product_detail
+    where product_id = #{productId,jdbcType=INTEGER}
+  </select>
+
+  <resultMap id="ConfigResultMap" type="java.util.HashMap" >
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="config_id" property="configId" jdbcType="INTEGER" />
+    <result column="config_name" property="configName" jdbcType="VARCHAR" />
+    <result column="config_value" property="configValue" jdbcType="TINYINT" />
+  </resultMap>
+
+  <select id="selectByProductIdAndTypeId" resultMap="ConfigResultMap" parameterType="java.lang.Integer" >
+    select b.product_id,a.config_id,c.name config_name,b.config_value from rad_type_config a
+    left join rad_product_detail b on a.config_id = b.config_id and b.product_id = #{productId,jdbcType=INTEGER}
+    left join rad_wordbook c on a.config_id=c.id and c.type=2
+    where a.type_id = #{typeId,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByProductId" parameterType="java.lang.Integer">
+    delete from rad_product_detail
+    where product_id = #{productId,jdbcType=INTEGER}
+  </delete>
+
+  <delete id="deleteByConfigId" parameterType="java.lang.Integer">
+    delete from rad_product_detail
+    where config_id = #{configId,jdbcType=INTEGER}
+  </delete>
+
+
+
+
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from rad_product_detail
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.jwei.rad.entity.RadProductDetail">
+    insert into rad_product_detail (product_id, config_id,
+      config_value)
+    values (#{productId,jdbcType=INTEGER}, #{configId,jdbcType=INTEGER},
+      #{configValue,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jwei.rad.entity.RadProductDetail">
+    insert into rad_product_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="configId != null">
+        config_id,
+      </if>
+      <if test="configValue != null">
+        config_value,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="configId != null">
+        #{configId,jdbcType=INTEGER},
+      </if>
+      <if test="configValue != null">
+        #{configValue,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jwei.rad.entity.RadProductDetail">
+    update rad_product_detail
+    <set>
+      <if test="productId != null">
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="configId != null">
+        config_id = #{configId,jdbcType=INTEGER},
+      </if>
+      <if test="configValue != null">
+        config_value = #{configValue,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jwei.rad.entity.RadProductDetail">
+    update rad_product_detail
+    set product_id = #{productId,jdbcType=INTEGER},
+      config_id = #{configId,jdbcType=INTEGER},
+      config_value = #{configValue,jdbcType=TINYINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+</mapper>

@@ -1,0 +1,157 @@
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            机型配置
+        </h3>
+
+    </div>
+
+    <div class="panel-body">
+
+        <ul id="myTab" class="nav nav-tabs">
+            <li class="active">
+                <a href="/#config" data-toggle="tab">
+                    配置参数
+                </a>
+            </li>
+            <li><a href="/#sort" data-toggle="tab">排序</a></li>
+
+        </ul>
+
+        <div id="myTabContent" class="tab-content">
+
+            <div class="tab-pane fade in active" id="config">
+
+                <div class="table-responsive" >
+                    <table class="table table-bordered table-hover table-condensed">
+                        <caption>配置列表
+                            <div style="float: right">
+                                <button class="btn btn-xs btn-success" ng-click="saveTypeConfig()">
+                                    <span class="glyphicon glyphicon-saved">保存</span>
+                                </button>
+                            </div>
+                        </caption>
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>类别</th>
+                            <th>名称</th>
+                            <th ng-repeat="x in typeList">{{x.name}}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="x in configList">
+                            <td>{{$index+1}}</td>
+                            <td>{{x.category==1?'工具类':x.category==2?'附件类':''}}</td>
+                            <td>{{x.name}}</td>
+                            <td ng-repeat="y in x.typeConfigList">
+                                <input type="checkbox" class="form-check-input" ng-model="y.checked">
+                            </td>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <div class="tab-pane fade" id="sort">
+                <div>
+                    &nbsp;
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-3">
+                        <div class="input-group">
+                            <span class="input-group-addon">分类</span>
+                            <select select2 class="form-control" ng-model="searchByCategory">
+                                <option ng-repeat="x in categoryList" value="{{x.id}}">{{x.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-2">
+                        <div class="form-group">
+                            <button class="btn btn-default" ng-click="getSortConfig()">查询</button>
+                            <button class="btn btn-success" ng-click="saveSortList()">保存排序</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-condensed">
+                        <caption>配置列表</caption>
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>类别</th>
+                            <th>名称</th>
+                            <th>排序</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="x in sortConfigList | orderBy:'seq'">
+                            <td>{{$index+1}}</td>
+                            <td>{{x.category==1?'工具类':x.category==2?'附件类':''}}</td>
+                            <td ng-click="setSortNum(x.id)">{{x.name}}</td>
+                            <td>
+                                <button type="button" class="btn btn-xs btn-info" ng-click="setSort(x.id,x.seq,x.seq-1)">
+                                    <span class="glyphicon glyphicon-arrow-up"></span>
+                                </button>
+                                <button type="button" class="btn btn-xs btn-default" ng-click="setSort(x.id,x.seq,x.seq+1)">
+                                    <span class="glyphicon glyphicon-arrow-down"></span>
+                                </button>
+                            </td>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- 标题 -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">配置信息</h4>
+            </div>
+            <div class="modal-body pre-scrollable">
+                <div class="row">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-condensed">
+                            <caption></caption>
+                            <thead>
+                            <tr>
+                                <th>名称</th>
+                                <th ng-repeat="x in typeList">{{x.name}}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="x in configList">
+                                <td>{{x.name}}</td>
+                                <td ng-repeat="y in x.configValueList">
+                                    <input type="checkbox" class="form-check-input" ng-model="y.checked">
+                                </td>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+            <!-- 提交 -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-success" ng-click="saveTypeConfig()">提交保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,58 @@
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            修改密码
+        </h3>
+    </div>
+
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-6 col-md-4">
+                <div class="col-sm-12 col-md-12">
+                    <div class="panel-heading">
+                        <div class="input-group">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-info" type="button">原始密码</button>
+                                </span>
+                            <input type="password" class="form-control" ng-model="modifyData.oldPsw" maxlength="20" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12">
+                    <div class="panel-heading">
+                        <div class="input-group">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-info" type="button">新&nbsp;&nbsp;密&nbsp;&nbsp;码</button>
+                                </span>
+                            <input type="password" class="form-control" ng-model="modifyData.newPsw" maxlength="20" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12">
+                    <div class="panel-heading">
+                        <div class="input-group">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-info" type="button">确认密码</button>
+                                </span>
+                            <input type="password" class="form-control" ng-model="modifyData.newPswAgain" maxlength="20" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-12">
+                    <div class="panel-heading">
+                        <div class="input-group" style="float: right">
+                            <button type="button" class="btn btn-success" ng-click="confirmModify()">提交保存</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+

@@ -1,0 +1,47 @@
+body {
+    font-family: "Microsoft YaHei", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.428571429;
+    color: #333333;
+    background-color: #ffffff;
+}
+
+.indexTop {
+    padding-right: 25px;
+    padding-left: 25px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+@media (min-width: 600px) {
+    .indexNavBar {
+        float:left;
+        margin-bottom:-300px;
+        margin-left:100px;
+    }
+    .leftContext {
+        float: left;
+        width: 10%;
+    }
+    .rightContext {
+        float:right;
+        width:90%;
+    }
+}
+
+@media (max-width: 600px) {
+    .indexNavBar {
+        float:right;
+        margin-bottom:-30px;
+        margin-right:20px;
+    }
+    .leftContext {
+        float: left;
+        width: 100%;
+    }
+    .rightContext {
+        float:right;
+        width:100%;
+    }
+}
+

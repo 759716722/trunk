@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+       <!--暂未使用-->
+
+       <!-- 调度业务对象 -->
+       <bean id="xxxxJob" class="com.jwei.task.xxx" />
+       <!-- 调度业务 -->
+       <!--
+       创建Quartz的作业Bean（JobDetail），有一下两种方法：
+       1.利用JobDetailFactoryBean包装QuartzJobBean子类（即Job类）的实例。采用这种方法创建job类，一定要继承QuartzJobBean ，实现 executeInternal(JobExecutionContext
+       jobexecutioncontext)方法,此方法就是被调度任务的执行体，然后将此Job类的实例直接配置到JobDetailBean中即可
+
+       2.利用MethodInvokingJobDetailFactoryBean工厂Bean包装普通的Java对象（即Job类）。采用这种方法 创建Job类，无须继承父类，直接配置MethodInvokingJobDetailFactoryBean即可。
+       但需要指定一下两个属性： targetObject：指定包含任务执行体的Bean实例。 targetMethod:指定将指定Bean实例的该方法包装成任务的执行体。
+       -->
+
+       <bean id="xxxxTask"
+             class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+              <property name="targetObject" ref="xxxxJob" />
+              <property name="targetMethod" value="xxxx" />
+
+              <property name="concurrent" value="false" />
+              <!--
+              设置为false时，定时任务会串行执行；就是定时任务开启时，知道这个job结束，才会执行下一个定时任务；
+
+              设置为true时，定时任务会并发执行，就是不管这个job有没有执行完，定时任务都会启动，
+              如果没有执行完，定时任务会开一个新的线程来执行job，确保能在设定的时间间隔内执行job；
+              定时器默认最多有十个线程，当十个线程都用完时，定时任务会阻塞，直到有新的线程可用，
+              才会开启定时任务去执行job；
+              -->
+       </bean>
+
+       <!-- 调度器触发器 每天早上07:00执行一次
+            每到指定时间则触发一次 CronTriggerFactoryBean
+            每隔指定时间则触发一次 SimpleTriggerFactoryBean
+       -->
+       <bean id="xxxxTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+              <property name="jobDetail" ref="xxxxTask" />
+              <property name="cronExpression" value="0 13 09 * * ? *" />
+       </bean>
+       <!-- 调度工厂 -->
+       <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+              <property name="triggers">
+                     <list>
+                            <!-- <ref bean="xxxxTrigger" /> -->
+                     </list>
+              </property>
+       </bean>
+
+
+</beans>

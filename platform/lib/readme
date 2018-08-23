@@ -1,0 +1,5 @@
+maven命令
+
+mvn install:install-file -Dfile=E:\work\springmvc-spring-mybatis-study\lib\sqljdbc4-4.1.jar -Dpackaging=jar -DgroupId=com.microsoft.sqlserver -DartifactId=sqljdbc4 -Dversion=4.1
+
+命令解释：mvn install:install-file -Dfile="jar包的绝对路径" -Dpackaging="文件打包方式" -DgroupId=groupid名 -DartifactId=artifactId名 -Dversion=jar版本

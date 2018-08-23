@@ -1,0 +1,145 @@
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            字典信息
+        </h3>
+    </div>
+
+    <div class="panel-body">
+
+        <div class="row">
+            <div class="col-sm-6 col-md-3">
+                <div class="input-group">
+                    <span class="input-group-addon">类型</span>
+                    <select select2 class="form-control" ng-model="searchData.type">
+                        <option value="">==全部==</option>
+                        <option ng-repeat="x in typeList" value="{{x.id}}">{{x.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="input-group">
+                    <span class="input-group-addon">名称</span>
+                    <input type="text" class="form-control" ng-model="searchData.name">
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-md-2">
+                <div class="form-group">
+                    <button class="btn btn-default" ng-click="getWordbook()">查询</button>
+                    <button class="btn btn-info" ng-click="addWordbook()">新增</button>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-condensed">
+                <caption>字典列表</caption>
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>类型</th>
+                    <th>分类</th>
+                    <th>名称</th>
+                    <th>创建人</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="x in dataList">
+                    <td>{{x.rowNo}}</td>
+                    <td>{{x.type==1?'行业':x.type==2?'配置':x.type==3?'机器类型':''}}</td>
+                    <td>{{x.category==1?'工具类':x.category==2?'附件类':''}}</td>
+                    <td>{{x.name}}</td>
+                    <td>{{x.createName}}</td>
+                    <td>{{x.createDate|date:'yyyy-MM-dd'}}</td>
+                    <td>
+                        <button class="btn btn-xs btn-info" ng-click="editWordbook(x.id)">
+                            <span class="glyphicon glyphicon-edit">编辑</span>
+                        </button>
+                        <button class="btn btn-xs btn-danger" ng-click="doDeleteWordbook(x.id)">
+                            <span class="glyphicon glyphicon-trash">删除</span>
+                        </button>
+                    </td>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div class="panel-footer">
+        <div class="row">
+            <div class="col-sm-4 text-left text-center-xs">
+                <small class="text-muted inline m-t-sm m-b-sm">共{{dataCount}}条数据</small>
+            </div>
+            <div class="col-sm-8 text-right text-center-xs">
+                <my-pagination count-data="{{dataCount}}" one-page-total="{{searchData.onePageNum}}" curr-page="searchData.pageNo" get-date-func="getWordbook()"></my-pagination>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- 标题 -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">字典信息</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col-sm-6 col-md-6">
+                        <div class="panel-heading">
+                            <div class="input-group">
+                                <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">类型</button>
+							    </span>
+                                <select select2 class="form-control" ng-model="addData.type">
+                                    <option ng-repeat="x in typeList" value="{{x.id}}">{{x.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-6" ng-if="addData.type==2">
+                        <div class="panel-heading">
+                            <div class="input-group">
+                                <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">分类</button>
+							    </span>
+                                <select select2 class="form-control" ng-model="addData.category">
+                                    <option ng-repeat="x in categoryList" value="{{x.id}}">{{x.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-12">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">名称</button>
+							    </span>
+                                <input type="text" class="form-control" ng-model="addData.name">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- 提交 -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-success" ng-click="saveWordbook()">提交保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

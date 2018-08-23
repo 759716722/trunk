@@ -1,0 +1,138 @@
+﻿-----引用
+<link href="js/select2-4.0.6/dist/css/select2.min.css" rel="stylesheet" type="text/css" />
+<script src="js/select2-4.0.6/dist/js/select2.full.min.js" type="text/javascript"></script>
+<script src="js/select2-4.0.6/dist/js/i18n/zh-CN.js" type="text/javascript"></script>
+
+-----使用
+
+<select id="search_prodtype" class="js-data-example-ajax form-control" >
+ 					
+</select>
+
+多选加入 multiple="multiple"
+
+
+----js
+
+$(function () {
+			
+			$("#search_prodtype").select2({
+	            ajax: {
+	                url: "../aps/apsProdtypeAction!getProdtype.action?",
+	                type:'GET',
+	                dataType: 'json',
+	                delay: 250,
+	                data:  function (params) {
+	                    return {
+	                    	prodtype: params.term, // 查询参数
+	                        page: params.page
+	                    };
+	                },
+	                processResults: function (data, params) {   //返回数据
+	                	var prodtypeList = new Array();
+	                	if(data.result.flag=='Y'){
+	                		var list = data.result.data;
+	                		for(var i=0;i<list.length;i++){
+	                			var obj = new Object();
+	                			obj.id = list[i].pid;
+	                			obj.text = list[i].prodtype+'  '+list[i].capacity;
+	                			obj.prodtype = list[i].prodtype;
+	                			prodtypeList.push(obj);
+	                		}
+	                	}
+	                	data = prodtypeList;
+	                    /*params.page = params.page || 1;*/
+
+	                    return {
+	                        results: data
+	                        /*pagination: {
+	                            more: (params.page * 30) < data.total_count
+	                        }*/
+	                    };
+	                },
+	                cache: true
+	            },
+	            escapeMarkup: function (markup) { return markup; }, // 字符转义处理
+	            minimumInputLength: 3, //设置最小需要输入多少个字符才进行查询
+	            language: "zh-CN", //设置 提示语言
+	            maximumSelectionLength: 2,  //设置最多可以选择多少项,单选时设置为2可以直接替换，无需清除后再选
+	            placeholder: "请选择",
+	            tags: false,  //设置必须存在的选项 才能选中
+	            allowClear: true, //设置清除功能
+	            
+	            // templateResult结果回调 templateSelection 选中项回调 可不实现，删除也可。
+	            templateResult: function (repo) { //搜索到结果返回后执行，可以控制下拉选项的样式
+	                if (repo.loading) return repo.text;
+	                var markup = "<div style='color:red'>" + repo.text + "</div>";
+	                return markup;
+	            },
+	            templateSelection: function (repo) {  //选中某一个选项是执行
+	                console.log("------------------templateSelection开始-------------------------------------");
+	                console.log( repo);
+	                console.log("------------------templateSelection结束-------------------------------------");
+	                if (repo.loading) return repo.text;
+	    		    var markup = "<div>"+repo.text+"</div>";
+	    		    return markup;
+	            }
+	            
+	        });
+
+		});
+		
+
+----获取值
+var res=$("#search_prodtype").select2("data")[0] ; //单选
+var reslist=$("#search_prodtype").select2("data");    //多选
+
+
+----赋值
+
+$('.selecter').html('<option value="' + value + '">' + text + '</option>').trigger("change");
+
+----试了很多，只有上面的能显示，下面的都不行。多选暂未试
+
+/*$("#add_prodtype").select2("val",$scope.addData.prodtype);*/
+
+/*$("#add_prodtype").val($scope.addData.prodtype).trigger("change");*/
+
+/*$("#add_prodtype").attr("value", obj);
+$("#add_prodtype").trigger('change');*/ 
+
+
+----ajax 方式的赋值------
+var newOption = new Option($scope.addData.prodtype,$scope.addData.pid, true, true);
+// Append it to the select
+$('#add_prodtype').append(newOption).trigger('change');
+
+
+var obj = new Object();
+obj.id = $scope.addData.pid;
+obj.text = $scope.addData.prodtype;
+obj.prodtype = $scope.addData.prodtype;
+
+----官网上给的这种并不能用啊，目的是为了可以取到别的属性值 不被 id和text 两个属性限制
+$('#add_prodtype').trigger({
+	   type: 'select2:select',
+	   params: {
+	            data: obj
+	           }
+})
+
+
+----清空
+$('#mySelect2').val(null).trigger('change');
+
+
+				----选择监听
+				el.on("select2:select", function (evt) {
+
+                    var data = evt.params.data;
+                    console.log(data);
+                    console.log($(el).val());
+                    if(attrs.multiple){
+                        console.log($(el).select2("data"))
+                    }else{
+                        console.log($(el).select2("data")[0]);
+                    }
+
+                });

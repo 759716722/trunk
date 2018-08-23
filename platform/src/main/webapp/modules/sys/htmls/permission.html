@@ -1,0 +1,203 @@
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            权限管理
+        </h3>
+    </div>
+
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-6 col-md-3">
+                <div class="input-group">
+                    <span class="input-group-addon">名称</span>
+                    <select select2-role class="form-control" select-Object="searchRoleObject"></select>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-md-3">
+                <div class="form-group">
+                    <button class="btn btn-default" ng-click="searchAll()">查询</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 col-md-3">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        角色信息
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">角色名</button>
+                            </span>
+                            <input type="text" class="form-control" ng-model="roleData.name">
+                        </div>
+                        <br>
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">描述</button>
+                            </span>
+                            <input type="text" class="form-control" ng-model="roleData.description">
+                        </div>
+                        <br>
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">备注</button>
+                            </span>
+                            <input type="text" class="form-control" ng-model="roleData.remark">
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-sm-6 col-md-5">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        关联用户
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">账号</button>
+                            </span>
+                            <select select2-user class="form-control" select-Object="searchUserObject" config="{{select2UserConfig}}"></select>
+                            <span class="input-group-btn">
+                                <button class="btn btn-info" type="button" ng-click="addUserRole()">添加</button>
+                            </span>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover table-condensed">
+                                <caption>用户列表</caption>
+                                <thead>
+                                <tr>
+                                    <!--<th>序号</th>-->
+                                    <th>账号</th>
+                                    <th>登录名</th>
+                                    <th>手机</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="x in userList">
+                                    <!--<td>{{x.rowNo}}</td>-->
+                                    <td>{{x.name}}</td>
+                                    <td>{{x.loginName}}</td>
+                                    <td>{{x.phone}}</td>
+                                    <td>
+                                        <button class="btn btn-xs btn-danger" ng-click="doDeleteUserRole(x.id)">
+                                            <span class="glyphicon glyphicon-trash">删除</span>
+                                        </button>
+                                    </td>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-sm-6 col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        关联菜单
+                        <div style="float: right">
+                            <button class="btn btn-xs btn-success" ng-click="saveRoleMenu()">
+                                <span class="glyphicon glyphicon-saved">保存</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+                        <div>
+                            <ul id="treePermission" class="ztree"></ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+    <!--<div class="panel-footer">
+        <div class="row">
+            <div class="col-sm-4 text-left text-center-xs">
+                <small class="text-muted inline m-t-sm m-b-sm">共{{dataCount}}条数据</small>
+            </div>
+            <div class="col-sm-8 text-right text-center-xs">
+                <my-pagination count-data="{{dataCount}}" one-page-total="{{searchData.onePageNum}}" curr-page="searchData.pageNo" get-date-func="getRole()"></my-pagination>
+            </div>
+        </div>
+    </div>-->
+</div>
+
+
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- 标题 -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">角色信息</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col-sm-6 col-md-6">
+                        <div class="panel-heading">
+                            <div class="input-group">
+                                <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">角色名</button>
+							    </span>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-6">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">描述</button>
+							    </span>
+                                <input type="text" class="form-control" ng-model="addData.description">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-6">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">备注</button>
+							    </span>
+                                <input type="text" class="form-control" ng-model="addData.remark">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- 提交 -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-success" ng-click="saveRole()">提交保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

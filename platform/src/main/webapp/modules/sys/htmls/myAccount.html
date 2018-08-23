@@ -1,0 +1,87 @@
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            个人资料
+        </h3>
+    </div>
+
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-6 col-md-8">
+                <div class="col-sm-6 col-md-4">
+                    <div class="panel-heading">
+                        <div class="input-group">
+							<span class="input-group-btn">
+								<button class="btn btn-info" type="button">账户</button>
+							</span>
+                            <input type="text" class="form-control" ng-model="myAccount.name" disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="panel-heading">
+                        <div class="input-group">
+							<span class="input-group-btn">
+								<button class="btn btn-info" type="button">登录名</button>
+							</span>
+                            <input type="text" class="form-control" ng-model="myAccount.loginName">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="panel-heading">
+                        <div class="input-group">
+							<span class="input-group-btn">
+								<button class="btn btn-info" type="button">性别</button>
+							</span>
+                            <select select2 type="text" class="form-control" ng-model="myAccount.sex">
+                                <option ng-repeat="x in sexList" value="{{x.id}}">{{x.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="panel-heading">
+                        <div class="input-group">
+							<span class="input-group-btn">
+								<button class="btn btn-info" type="button">生日</button>
+							</span>
+                            <laydate class="form-control" ng-model="myAccount.birthday">{{myAccount.birthday | date:'yyyy-MM-dd'}}</laydate>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="panel-heading">
+                        <div class="input-group">
+							<span class="input-group-btn">
+								<button class="btn btn-info" type="button">手机</button>
+							</span>
+                            <input type="text" class="form-control" ng-model="myAccount.phone">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-6">
+                    <div class="panel-heading">
+                        <div class="input-group">
+							<span class="input-group-btn">
+								<button class="btn btn-info" type="button">邮箱</button>
+							</span>
+                            <input type="text" class="form-control" ng-model="myAccount.email">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+

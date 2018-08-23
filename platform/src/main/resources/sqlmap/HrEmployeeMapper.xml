@@ -1,0 +1,622 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jwei.hr.dao.HrEmployeeMapper" >
+  <resultMap id="BaseResultMap" type="com.jwei.hr.entity.HrEmployee" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="employee_no" property="employeeNo" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="TINYINT" />
+    <result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
+    <result column="id_card" property="idCard" jdbcType="CHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="native_place" property="nativePlace" jdbcType="VARCHAR" />
+    <result column="ethnic_group" property="ethnicGroup" jdbcType="VARCHAR" />
+    <result column="hukou_type" property="hukouType" jdbcType="VARCHAR" />
+    <result column="family_linkman" property="familyLinkman" jdbcType="VARCHAR" />
+    <result column="family_relation" property="familyRelation" jdbcType="VARCHAR" />
+    <result column="family_linkphone" property="familyLinkphone" jdbcType="VARCHAR" />
+    <result column="now_addr" property="nowAddr" jdbcType="VARCHAR" />
+    <result column="family_addr" property="familyAddr" jdbcType="VARCHAR" />
+    <result column="education" property="education" jdbcType="VARCHAR" />
+    <result column="university" property="university" jdbcType="VARCHAR" />
+    <result column="major" property="major" jdbcType="VARCHAR" />
+    <result column="graduate_date" property="graduateDate" jdbcType="TIMESTAMP" />
+    <result column="join_date" property="joinDate" jdbcType="TIMESTAMP" />
+    <result column="contract_num" property="contractNum" jdbcType="TINYINT" />
+    <result column="contract_start_date" property="contractStartDate" jdbcType="TIMESTAMP" />
+    <result column="contract_end_date" property="contractEndDate" jdbcType="TIMESTAMP" />
+    <result column="dept_id" property="deptId" jdbcType="BIGINT" />
+    <result column="dept_name" property="deptName" jdbcType="VARCHAR" />
+    <result column="duty" property="duty" jdbcType="VARCHAR" />
+    <result column="own_company" property="ownCompany" jdbcType="VARCHAR" />
+    <result column="social_security" property="socialSecurity" jdbcType="VARCHAR" />
+    <result column="house_fund" property="houseFund" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="TINYINT" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_id" property="createId" jdbcType="BIGINT" />
+    <result column="create_name" property="createName" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="modify_id" property="modifyId" jdbcType="BIGINT" />
+    <result column="modify_name" property="modifyName" jdbcType="VARCHAR" />
+    <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    <result column="leave_date" property="leaveDate" jdbcType="TIMESTAMP" />
+    <result column="professional_title" property="professionalTitle" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, employee_no, name, sex, birthday, id_card, phone, email, native_place, ethnic_group, 
+    hukou_type, family_linkman, family_relation, family_linkphone, now_addr, family_addr, 
+    education, university, major, graduate_date, join_date, contract_num, contract_start_date, 
+    contract_end_date, dept_id, dept_name, duty, own_company, social_security, house_fund, 
+    state, remark, create_id, create_name, create_date, modify_id, modify_name, modify_date, 
+    leave_date, professional_title
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from hr_employee
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+
+  <select id="selectByIdCard" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from hr_employee
+    where id_card = #{idCard,jdbcType=VARCHAR}
+  </select>
+
+
+  <resultMap id="PageResultMap" type="java.util.HashMap" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="row_no" property="rowNo" jdbcType="INTEGER" />
+    <result column="employee_no" property="employeeNo" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="TINYINT" />
+    <result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
+    <result column="id_card" property="idCard" jdbcType="CHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="hukou_type" property="hukouType" jdbcType="VARCHAR" />
+    <result column="join_date" property="joinDate" jdbcType="TIMESTAMP" />
+    <result column="contract_end_date" property="contractEndDate" jdbcType="TIMESTAMP" />
+    <result column="dept_id" property="deptId" jdbcType="BIGINT" />
+    <result column="dept_name" property="deptName" jdbcType="VARCHAR" />
+    <result column="duty" property="duty" jdbcType="VARCHAR" />
+    <result column="own_company" property="ownCompany" jdbcType="VARCHAR" />
+    <result column="social_security" property="socialSecurity" jdbcType="VARCHAR" />
+    <result column="house_fund" property="houseFund" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="TINYINT" />
+  </resultMap>
+
+  <select id="selectByPage" resultMap="PageResultMap">
+    select * from (
+    select row_number()over(order by id) row_no,
+    <include refid="Base_Column_List" />
+    from hr_employee
+    where 1=1
+    <if test="employNo != null">
+      and employee_no = #{employNo,jdbcType=VARCHAR}
+    </if>
+    <if test="name != null">
+      and name like '%${name}%'
+    </if>
+    <if test="idCard != null">
+      and id_card = #{idCard,jdbcType=VARCHAR}
+    </if>
+    <if test="birthdayMonth != null">
+      and month(birthday) = #{birthdayMonth,jdbcType=INTEGER}
+    </if>
+    <if test="contractDate != null">
+      and contract_end_date &lt;= #{contractDate,jdbcType=TIMESTAMP}
+    </if>
+    <if test="state != null">
+      and state = #{state,jdbcType=TINYINT}
+    </if>
+
+    ) a where row_no between ${start} and ${end}
+
+  </select>
+
+  <select id="countByPage" resultType="java.lang.Integer" >
+    select count(*)
+    from hr_employee
+    where 1=1
+    <if test="employNo != null">
+      and employee_no = #{employNo,jdbcType=VARCHAR}
+    </if>
+    <if test="name != null">
+      and name like '%${name}%'
+    </if>
+    <if test="idCard != null">
+      and id_card = #{idCard,jdbcType=VARCHAR}
+    </if>
+    <if test="birthdayMonth != null">
+      and month(birthday) = #{birthdayMonth,jdbcType=INTEGER}
+    </if>
+    <if test="contractDate != null">
+      and contract_end_date &lt;= #{contractDate,jdbcType=TIMESTAMP}
+    </if>
+    <if test="state != null">
+      and state = #{state,jdbcType=TINYINT}
+    </if>
+
+  </select>
+
+
+  <select id="selectByCond" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from hr_employee
+    where 1=1
+    <if test="birthdayMonth != null">
+      and month(birthday) = #{birthdayMonth,jdbcType=INTEGER}
+    </if>
+    <if test="noContractDay != null">
+      and datediff(dd,join_date,getdate())&gt;= #{noContractDay,jdbcType=INTEGER}
+      and contract_start_date is null
+    </if>
+    <if test="contractDate != null">
+      and contract_end_date &lt;= #{contractDate,jdbcType=TIMESTAMP}
+    </if>
+    <if test="state != null">
+      and state = #{state,jdbcType=TINYINT}
+    </if>
+
+  </select>
+
+
+
+
+
+
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from hr_employee
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.jwei.hr.entity.HrEmployee" >
+    insert into hr_employee (employee_no, name,
+      sex, birthday, id_card, 
+      phone, email, native_place, 
+      ethnic_group, hukou_type, family_linkman, 
+      family_relation, family_linkphone, now_addr, 
+      family_addr, education, university, 
+      major, graduate_date, join_date, 
+      contract_num, contract_start_date, contract_end_date, 
+      dept_id, dept_name, duty, 
+      own_company, social_security, house_fund, 
+      state, remark, create_id, 
+      create_name, create_date, modify_id, 
+      modify_name, modify_date, leave_date, 
+      professional_title)
+    values (#{employeeNo,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+      #{sex,jdbcType=TINYINT}, #{birthday,jdbcType=TIMESTAMP}, #{idCard,jdbcType=CHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{nativePlace,jdbcType=VARCHAR}, 
+      #{ethnicGroup,jdbcType=VARCHAR}, #{hukouType,jdbcType=VARCHAR}, #{familyLinkman,jdbcType=VARCHAR}, 
+      #{familyRelation,jdbcType=VARCHAR}, #{familyLinkphone,jdbcType=VARCHAR}, #{nowAddr,jdbcType=VARCHAR}, 
+      #{familyAddr,jdbcType=VARCHAR}, #{education,jdbcType=VARCHAR}, #{university,jdbcType=VARCHAR}, 
+      #{major,jdbcType=VARCHAR}, #{graduateDate,jdbcType=TIMESTAMP}, #{joinDate,jdbcType=TIMESTAMP}, 
+      #{contractNum,jdbcType=TINYINT}, #{contractStartDate,jdbcType=TIMESTAMP}, #{contractEndDate,jdbcType=TIMESTAMP}, 
+      #{deptId,jdbcType=BIGINT}, #{deptName,jdbcType=VARCHAR}, #{duty,jdbcType=VARCHAR}, 
+      #{ownCompany,jdbcType=VARCHAR}, #{socialSecurity,jdbcType=VARCHAR}, #{houseFund,jdbcType=VARCHAR}, 
+      #{state,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT}, 
+      #{createName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifyId,jdbcType=BIGINT}, 
+      #{modifyName,jdbcType=VARCHAR}, #{modifyDate,jdbcType=TIMESTAMP}, #{leaveDate,jdbcType=TIMESTAMP}, 
+      #{professionalTitle,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jwei.hr.entity.HrEmployee" >
+    insert into hr_employee
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="employeeNo != null" >
+        employee_no,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="idCard != null" >
+        id_card,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="nativePlace != null" >
+        native_place,
+      </if>
+      <if test="ethnicGroup != null" >
+        ethnic_group,
+      </if>
+      <if test="hukouType != null" >
+        hukou_type,
+      </if>
+      <if test="familyLinkman != null" >
+        family_linkman,
+      </if>
+      <if test="familyRelation != null" >
+        family_relation,
+      </if>
+      <if test="familyLinkphone != null" >
+        family_linkphone,
+      </if>
+      <if test="nowAddr != null" >
+        now_addr,
+      </if>
+      <if test="familyAddr != null" >
+        family_addr,
+      </if>
+      <if test="education != null" >
+        education,
+      </if>
+      <if test="university != null" >
+        university,
+      </if>
+      <if test="major != null" >
+        major,
+      </if>
+      <if test="graduateDate != null" >
+        graduate_date,
+      </if>
+      <if test="joinDate != null" >
+        join_date,
+      </if>
+      <if test="contractNum != null" >
+        contract_num,
+      </if>
+      <if test="contractStartDate != null" >
+        contract_start_date,
+      </if>
+      <if test="contractEndDate != null" >
+        contract_end_date,
+      </if>
+      <if test="deptId != null" >
+        dept_id,
+      </if>
+      <if test="deptName != null" >
+        dept_name,
+      </if>
+      <if test="duty != null" >
+        duty,
+      </if>
+      <if test="ownCompany != null" >
+        own_company,
+      </if>
+      <if test="socialSecurity != null" >
+        social_security,
+      </if>
+      <if test="houseFund != null" >
+        house_fund,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createId != null" >
+        create_id,
+      </if>
+      <if test="createName != null" >
+        create_name,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="modifyId != null" >
+        modify_id,
+      </if>
+      <if test="modifyName != null" >
+        modify_name,
+      </if>
+      <if test="modifyDate != null" >
+        modify_date,
+      </if>
+      <if test="leaveDate != null" >
+        leave_date,
+      </if>
+      <if test="professionalTitle != null" >
+        professional_title,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="employeeNo != null" >
+        #{employeeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="idCard != null" >
+        #{idCard,jdbcType=CHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="nativePlace != null" >
+        #{nativePlace,jdbcType=VARCHAR},
+      </if>
+      <if test="ethnicGroup != null" >
+        #{ethnicGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="hukouType != null" >
+        #{hukouType,jdbcType=VARCHAR},
+      </if>
+      <if test="familyLinkman != null" >
+        #{familyLinkman,jdbcType=VARCHAR},
+      </if>
+      <if test="familyRelation != null" >
+        #{familyRelation,jdbcType=VARCHAR},
+      </if>
+      <if test="familyLinkphone != null" >
+        #{familyLinkphone,jdbcType=VARCHAR},
+      </if>
+      <if test="nowAddr != null" >
+        #{nowAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="familyAddr != null" >
+        #{familyAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="education != null" >
+        #{education,jdbcType=VARCHAR},
+      </if>
+      <if test="university != null" >
+        #{university,jdbcType=VARCHAR},
+      </if>
+      <if test="major != null" >
+        #{major,jdbcType=VARCHAR},
+      </if>
+      <if test="graduateDate != null" >
+        #{graduateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="joinDate != null" >
+        #{joinDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contractNum != null" >
+        #{contractNum,jdbcType=TINYINT},
+      </if>
+      <if test="contractStartDate != null" >
+        #{contractStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contractEndDate != null" >
+        #{contractEndDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deptId != null" >
+        #{deptId,jdbcType=BIGINT},
+      </if>
+      <if test="deptName != null" >
+        #{deptName,jdbcType=VARCHAR},
+      </if>
+      <if test="duty != null" >
+        #{duty,jdbcType=VARCHAR},
+      </if>
+      <if test="ownCompany != null" >
+        #{ownCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="socialSecurity != null" >
+        #{socialSecurity,jdbcType=VARCHAR},
+      </if>
+      <if test="houseFund != null" >
+        #{houseFund,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=BIGINT},
+      </if>
+      <if test="createName != null" >
+        #{createName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyId != null" >
+        #{modifyId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyName != null" >
+        #{modifyName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyDate != null" >
+        #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="leaveDate != null" >
+        #{leaveDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="professionalTitle != null" >
+        #{professionalTitle,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jwei.hr.entity.HrEmployee" >
+    update hr_employee
+    <set >
+      <if test="employeeNo != null" >
+        employee_no = #{employeeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="idCard != null" >
+        id_card = #{idCard,jdbcType=CHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="nativePlace != null" >
+        native_place = #{nativePlace,jdbcType=VARCHAR},
+      </if>
+      <if test="ethnicGroup != null" >
+        ethnic_group = #{ethnicGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="hukouType != null" >
+        hukou_type = #{hukouType,jdbcType=VARCHAR},
+      </if>
+      <if test="familyLinkman != null" >
+        family_linkman = #{familyLinkman,jdbcType=VARCHAR},
+      </if>
+      <if test="familyRelation != null" >
+        family_relation = #{familyRelation,jdbcType=VARCHAR},
+      </if>
+      <if test="familyLinkphone != null" >
+        family_linkphone = #{familyLinkphone,jdbcType=VARCHAR},
+      </if>
+      <if test="nowAddr != null" >
+        now_addr = #{nowAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="familyAddr != null" >
+        family_addr = #{familyAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="education != null" >
+        education = #{education,jdbcType=VARCHAR},
+      </if>
+      <if test="university != null" >
+        university = #{university,jdbcType=VARCHAR},
+      </if>
+      <if test="major != null" >
+        major = #{major,jdbcType=VARCHAR},
+      </if>
+      <if test="graduateDate != null" >
+        graduate_date = #{graduateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="joinDate != null" >
+        join_date = #{joinDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contractNum != null" >
+        contract_num = #{contractNum,jdbcType=TINYINT},
+      </if>
+      <if test="contractStartDate != null" >
+        contract_start_date = #{contractStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contractEndDate != null" >
+        contract_end_date = #{contractEndDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deptId != null" >
+        dept_id = #{deptId,jdbcType=BIGINT},
+      </if>
+      <if test="deptName != null" >
+        dept_name = #{deptName,jdbcType=VARCHAR},
+      </if>
+      <if test="duty != null" >
+        duty = #{duty,jdbcType=VARCHAR},
+      </if>
+      <if test="ownCompany != null" >
+        own_company = #{ownCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="socialSecurity != null" >
+        social_security = #{socialSecurity,jdbcType=VARCHAR},
+      </if>
+      <if test="houseFund != null" >
+        house_fund = #{houseFund,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        create_id = #{createId,jdbcType=BIGINT},
+      </if>
+      <if test="createName != null" >
+        create_name = #{createName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyId != null" >
+        modify_id = #{modifyId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyName != null" >
+        modify_name = #{modifyName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyDate != null" >
+        modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="leaveDate != null" >
+        leave_date = #{leaveDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="professionalTitle != null" >
+        professional_title = #{professionalTitle,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jwei.hr.entity.HrEmployee" >
+    update hr_employee
+    set employee_no = #{employeeNo,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=TINYINT},
+      birthday = #{birthday,jdbcType=TIMESTAMP},
+      id_card = #{idCard,jdbcType=CHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      native_place = #{nativePlace,jdbcType=VARCHAR},
+      ethnic_group = #{ethnicGroup,jdbcType=VARCHAR},
+      hukou_type = #{hukouType,jdbcType=VARCHAR},
+      family_linkman = #{familyLinkman,jdbcType=VARCHAR},
+      family_relation = #{familyRelation,jdbcType=VARCHAR},
+      family_linkphone = #{familyLinkphone,jdbcType=VARCHAR},
+      now_addr = #{nowAddr,jdbcType=VARCHAR},
+      family_addr = #{familyAddr,jdbcType=VARCHAR},
+      education = #{education,jdbcType=VARCHAR},
+      university = #{university,jdbcType=VARCHAR},
+      major = #{major,jdbcType=VARCHAR},
+      graduate_date = #{graduateDate,jdbcType=TIMESTAMP},
+      join_date = #{joinDate,jdbcType=TIMESTAMP},
+      contract_num = #{contractNum,jdbcType=TINYINT},
+      contract_start_date = #{contractStartDate,jdbcType=TIMESTAMP},
+      contract_end_date = #{contractEndDate,jdbcType=TIMESTAMP},
+      dept_id = #{deptId,jdbcType=BIGINT},
+      dept_name = #{deptName,jdbcType=VARCHAR},
+      duty = #{duty,jdbcType=VARCHAR},
+      own_company = #{ownCompany,jdbcType=VARCHAR},
+      social_security = #{socialSecurity,jdbcType=VARCHAR},
+      house_fund = #{houseFund,jdbcType=VARCHAR},
+      state = #{state,jdbcType=TINYINT},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_id = #{createId,jdbcType=BIGINT},
+      create_name = #{createName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modify_id = #{modifyId,jdbcType=BIGINT},
+      modify_name = #{modifyName,jdbcType=VARCHAR},
+      modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      leave_date = #{leaveDate,jdbcType=TIMESTAMP},
+      professional_title = #{professionalTitle,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

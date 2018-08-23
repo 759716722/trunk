@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>经纬科技</title>
+    <link rel="stylesheet" href="../static/lib/bootstrap/css/bootstrap.css" type="text/css"/>
+    <link rel="stylesheet" href="../static/css/app.css" type="text/css"/>
+
+</head>
+<body>
+
+<div id="app">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                产品搜索
+            </h3>
+        </div>
+
+        <div class="panel-body">
+            <div class="row">
+
+                <div class="col-sm-12 col-md-12">
+                    <div class="btn-group">
+                    <span v-for="x in industryList">
+                        <button v-bind:class="['btn',x.checked? 'btn-info':'btn-default']" v-on:click="choose(x)">{{x.name}}</button>
+
+                    </span>
+
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-12">
+                    &nbsp;&nbsp;
+                </div>
+
+                <div class="col-sm-12 col-md-12">
+                    <div class="btn-group">
+                    <span v-for="x in configList">
+                        <button ng-class="x.checked?'btn btn-info':'btn btn-default'" v-on:click="choose(x)">{{x.name}}</button>
+
+                    </span>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-12">
+                    &nbsp;&nbsp;
+                </div>
+
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <button class="btn btn-default" ng-click="search()">查询</button>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover table-condensed">
+                    <caption>产品列表</caption>
+                    <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>类型</th>
+                        <th>行业</th>
+                        <th>型号</th>
+                        <th>描述</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="x in dataList">
+                        <td>{{x.rowNo}}</td>
+                        <td>{{x.type}}</td>
+                        <td>{{x.industry}}</td>
+                        <td>{{x.model}}</td>
+                        <td>{{x.modelDesc}}</td>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+<script src="../static/lib/jquery/jquery-3.2.1.min.js"></script>
+<!--Bootstrap-->
+<script src="../static/lib/bootstrap/js/bootstrap.min.js"></script>
+
+<!--vue-->
+<script src="../static/lib/vue/vue.min.js"></script>
+<script src="../static/lib/vue/axios.min.js"></script>
+
+<script type="text/javascript">
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            industryList: [{id:'111',name:'222'},{id:'111',name:'222'}],
+            configList: [],
+            dataList:[]
+        },
+        mounted:function(){
+            this.getConfig();
+            this.getIndustry();
+        },
+        methods: {
+            getIndustry() {
+                axios.get('../rad/wordbook/getWordbookByCond.do?type=1')
+                        .then(function (result) {
+                            if (result.status == 200 && result.statusText == 'OK') {
+                                if (result.data.flag == 'Y') {
+                                    app.industryList = JSON.parse(result.data.data);
+                                } else {
+                                    alert(result);
+                                }
+                            }
+                        })
+                        .catch(function (error) {
+                            alert(error);
+                        });
+
+            },
+            getConfig() {
+                axios.get('../rad/wordbook/getWordbookByCond.do?type=2')
+                        .then(function (result) {
+                            if(result.status==200 && result.statusText=='OK'){
+                                if(result.data.flag=='Y'){
+                                    console.log(app);
+                                    app.configList = JSON.parse(result.data.data);
+                                }else{
+                                    alert(result);
+                                }
+                            }
+                        })
+                        .catch(function (error) {
+                            alert(error);
+                        });
+            },
+    choose(one){
+
+        for(var i=0;i<app.industryList.length;i++){
+            console.log(app.industryList[i]);
+            if(app.industryList[i].id===one.id){
+
+                if(one.checked){
+                    this.$set(this.industryList[i],"checked",false);
+                }else{
+                    this.$set(this.industryList[i],"checked",true);
+                }
+
+            }
+        }
+
+    }
+
+        }
+
+        })
+
+</script>
+
+
+
+</body>
+</html>

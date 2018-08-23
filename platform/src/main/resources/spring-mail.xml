@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <!-- 配置发送邮件的bean -->
+    <bean id = "mailSender" class = "org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="smtp.qq.com"/>
+        <property name="port" value="25"/>
+        <property name="protocol" value="smtp"/>
+        <!--你设置开启授权码的邮箱-->
+        <property name="username" value="759716722@qq.com"/>
+        <!--这里并非是你登录邮箱的密码, 而是你开启SMTP服务时候设置的授权码-->
+        <property name="password" value="whxhtyxusffcbdjf"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="javaMailProperties">
+            <props>
+                <!--这个值一定要设置, 这是授权验证-->
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.transport.protocol">smtp</prop>
+                <!--开启 starttls 加密传输-->
+                <!--<prop key="mail.smtp.starttls.enable">true</prop>-->
+                <!--连接smtp服务器的超时时间-->
+                <!--<prop key="mail.smtp.connectiontimeout">1000</prop>-->
+                <!--发送邮件超时时间-->
+                <!--<prop key="mail.smtp.timeout">1000</prop>-->
+                <!--<prop key="mail.smtp.ssl.enable">true</prop>-->
+                <!--<prop key="mail.smtp.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop>-->
+                <!--<prop key="mail.smtp.socketFactory.fallback">false</prop>-->
+                <prop key="mail.debug">false</prop>
+            </props>
+        </property>
+    </bean>
+
+
+    <bean id="simpleMail" class="org.springframework.mail.SimpleMailMessage">
+        <property name="from" value="759716722@qq.com" />
+    </bean>
+
+
+
+</beans>

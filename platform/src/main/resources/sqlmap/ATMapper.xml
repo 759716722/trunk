@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jwei.task.dao.ATMapper">
+
+
+
+  <select id="selectUserByName" parameterType="java.lang.String" resultType="java.util.HashMap">
+    select * from sys_user where cnname = #{name,jdbcType=VARCHAR} and usable=1
+  </select>
+
+  <select id="selectCustomerById" parameterType="java.lang.String" resultType="java.util.HashMap">
+    select * from c_account where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectCustomerByName" parameterType="java.lang.String" resultType="java.util.HashMap">
+    select * from c_account where name like '%${custName}%'
+  </select>
+
+  <insert id="insertCustomer" parameterType="java.util.HashMap">
+    insert into c_account (id, name,code,spellcode,first_buy_date,
+      custom6,region,trade,custom7,custom3,telephone,custom20,address,remark,
+      own_dpt,own_usr,rubbish,create_by,create_time
+    )
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+      #{code,jdbcType=VARCHAR}, #{spellcode,jdbcType=VARCHAR}, #{first_buy_date,jdbcType=VARCHAR},
+      #{custom6,jdbcType=TIMESTAMP}, #{region,jdbcType=VARCHAR}, #{trade,jdbcType=VARCHAR},
+      #{custom7,jdbcType=VARCHAR}, #{custom3,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR},
+      #{custom20,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},
+      #{own_dpt,jdbcType=INTEGER},#{own_usr,jdbcType=INTEGER},
+      '0','task任务',sysdate()
+      )
+  </insert>
+
+  <update id="updateCustomerByPrimaryKeySelective" parameterType="java.util.HashMap">
+    update c_account
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="spellcode != null">
+        spellcode = #{spellcode,jdbcType=VARCHAR},
+      </if>
+      <if test="first_buy_date != null">
+        first_buy_date = #{first_buy_date,jdbcType=VARCHAR},
+      </if>
+      <if test="custom6 != null">
+        custom6 = #{custom6,jdbcType=TIMESTAMP},
+      </if>
+      <if test="region != null">
+        region = #{region,jdbcType=VARCHAR},
+      </if>
+      <if test="trade != null">
+        trade = #{trade,jdbcType=VARCHAR},
+      </if>
+      <if test="custom7 != null">
+        custom7 = #{custom7,jdbcType=VARCHAR},
+      </if>
+      <if test="custom3 != null">
+        custom3 = #{custom3,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null">
+        telephone = #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="custom20 != null">
+        custom20 = #{custom20,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      update_by = 'task任务',
+      update_time = sysdate()
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectProductByName" resultType="java.util.HashMap">
+    select * from b_product where
+    name=#{productName,jdbcType=VARCHAR}
+    and rubbish=0  limit 1
+  </select>
+
+  <insert id="insertProduct" parameterType="java.util.HashMap">
+    insert into b_product (id,name,code,catalog_id,spellcode,rubbish,create_by,create_time)
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},#{code,jdbcType=VARCHAR},
+      #{catalog_id,jdbcType=VARCHAR},#{spellcode,jdbcType=VARCHAR},
+      0,'task任务',sysdate())
+  </insert>
+
+  <select id="selectOrderByOrderNo" parameterType="java.lang.String" resultType="java.util.HashMap">
+    SELECT * FROM sale_order WHERE code= #{orderNo,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectOrderMaxSort" resultType="java.lang.Integer">
+    select max(sort)+1 from sale_order
+  </select>
+
+  <insert id="insertOrder" parameterType="java.util.HashMap">
+    insert into sale_order (id,code,subject,sort,custom19,sell_date,custom21,seller,custom41,account_id,
+    custom23,custom1,phone,address,custom24,custom25,custom26,custom27,custom40,custom29,custom31,
+    custom30,custom32,custom33,custom34,custom35,custom36,custom37,custom38,custom39,custom15,custom16,
+    remark,custom17,custom42,own_dpt,own_usr,rubbish,audit_status,create_by,create_time
+    )
+    values (
+    #{id,jdbcType=VARCHAR},#{code,jdbcType=VARCHAR},#{subject,jdbcType=VARCHAR},#{sort,jdbcType=INTEGER},
+    #{custom19,jdbcType=VARCHAR},#{sell_date,jdbcType=VARCHAR},
+    #{custom21,jdbcType=VARCHAR},#{seller,jdbcType=VARCHAR},#{custom41,jdbcType=VARCHAR},#{account_id,jdbcType=VARCHAR},
+    #{custom23,jdbcType=VARCHAR},#{custom1,jdbcType=VARCHAR},#{phone,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR},
+    #{custom24,jdbcType=VARCHAR},#{custom25,jdbcType=VARCHAR},#{custom26,jdbcType=VARCHAR},#{custom27,jdbcType=VARCHAR},
+    #{custom40,jdbcType=VARCHAR},#{custom29,jdbcType=VARCHAR},#{custom31,jdbcType=VARCHAR},#{custom30,jdbcType=VARCHAR},
+    #{custom32,jdbcType=VARCHAR},#{custom33,jdbcType=VARCHAR},#{custom34,jdbcType=VARCHAR},#{custom35,jdbcType=VARCHAR},
+    #{custom36,jdbcType=VARCHAR},#{custom37,jdbcType=VARCHAR},#{custom38,jdbcType=VARCHAR},#{custom39,jdbcType=VARCHAR},
+    #{custom15,jdbcType=VARCHAR},#{custom16,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR},#{custom17,jdbcType=VARCHAR},#{custom42,jdbcType=VARCHAR},
+    #{own_dpt,jdbcType=INTEGER},#{own_usr,jdbcType=INTEGER},
+    '0','草稿','task任务',sysdate()
+    )
+  </insert>
+
+
+  <update id="updateOrderByPrimaryKeySelective" parameterType="java.util.HashMap">
+    update sale_order
+    <set>
+      <if test="subject != null">
+        subject = #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="custom19 != null">
+        custom19 = #{custom19,jdbcType=VARCHAR},
+      </if>
+      <if test="sell_date != null">
+        sell_date = #{sell_date,jdbcType=VARCHAR},
+      </if>
+      <if test="custom21 != null">
+        custom21 = #{custom21,jdbcType=VARCHAR},
+      </if>
+      <if test="seller != null">
+        seller = #{seller,jdbcType=VARCHAR},
+      </if>
+      <if test="custom41 != null">
+        custom41 = #{custom41,jdbcType=VARCHAR},
+      </if>
+      <if test="account_id != null">
+        account_id = #{account_id,jdbcType=VARCHAR},
+      </if>
+      <if test="custom23 != null">
+        custom23 = #{custom23,jdbcType=VARCHAR},
+      </if>
+      <if test="custom1 != null">
+        custom1 = #{custom1,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="custom24 != null">
+        custom24 = #{custom24,jdbcType=VARCHAR},
+      </if>
+      <if test="custom25 != null">
+        custom25 = #{custom25,jdbcType=VARCHAR},
+      </if>
+      <if test="custom26 != null">
+        custom26 = #{custom26,jdbcType=VARCHAR},
+      </if>
+      <if test="custom27 != null">
+        custom27 = #{custom27,jdbcType=VARCHAR},
+      </if>
+      <if test="custom40 != null">
+        custom40 = #{custom40,jdbcType=VARCHAR},
+      </if>
+      <if test="custom29 != null">
+        custom29 = #{custom29,jdbcType=VARCHAR},
+      </if>
+      <if test="custom31 != null">
+        custom31 = #{custom31,jdbcType=VARCHAR},
+      </if>
+      <if test="custom30 != null">
+        custom30 = #{custom30,jdbcType=VARCHAR},
+      </if>
+      <if test="custom32 != null">
+        custom32 = #{custom32,jdbcType=VARCHAR},
+      </if>
+      <if test="custom33 != null">
+        custom33 = #{custom33,jdbcType=VARCHAR},
+      </if>
+      <if test="custom34 != null">
+        custom34 = #{custom34,jdbcType=VARCHAR},
+      </if>
+      <if test="custom35 != null">
+        custom35 = #{custom35,jdbcType=VARCHAR},
+      </if>
+      <if test="custom36 != null">
+        custom36 = #{custom36,jdbcType=VARCHAR},
+      </if>
+      <if test="custom37 != null">
+        custom37 = #{custom37,jdbcType=VARCHAR},
+      </if>
+      <if test="custom38 != null">
+        custom38 = #{custom38,jdbcType=VARCHAR},
+      </if>
+      <if test="custom39 != null">
+        custom39 = #{custom39,jdbcType=VARCHAR},
+      </if>
+      <if test="custom15 != null">
+        custom15 = #{custom15,jdbcType=VARCHAR},
+      </if>
+      <if test="custom16 != null">
+        custom16 = #{custom16,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="custom17 != null">
+        custom17 = #{custom17,jdbcType=VARCHAR},
+      </if>
+      <if test="custom42 != null">
+        custom42 = #{custom42,jdbcType=VARCHAR},
+      </if>
+      update_by = 'task任务',
+      update_time = sysdate()
+
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <insert id="insertOrderDetail" parameterType="java.util.HashMap">
+    insert into sale_order_detail (id,sort,sale_order_id,product_id,catalog_id,quantity,custom8,
+    custom4,spec,custom16,custom7,custom5,custom6
+    )
+    values (
+    #{id,jdbcType=VARCHAR},#{sort,jdbcType=INTEGER},#{sale_order_id,jdbcType=VARCHAR},#{product_id,jdbcType=VARCHAR},#{catalog_id,jdbcType=VARCHAR},
+    #{quantity,jdbcType=VARCHAR},#{custom8,jdbcType=VARCHAR},#{custom4,jdbcType=VARCHAR},#{spec,jdbcType=VARCHAR},
+    #{custom16,jdbcType=VARCHAR},#{custom7,jdbcType=VARCHAR},#{custom5,jdbcType=VARCHAR},#{custom6,jdbcType=VARCHAR}
+    )
+  </insert>
+
+  <update id="updateOrderDetailByPrimaryKeySelective" parameterType="java.util.HashMap">
+    update sale_order_detail
+    <set>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="sale_order_id != null">
+        sale_order_id = #{sale_order_id,jdbcType=VARCHAR},
+      </if>
+      <if test="product_id != null">
+        product_id = #{product_id,jdbcType=VARCHAR},
+      </if>
+      <if test="catalog_id != null">
+        catalog_id = #{catalog_id,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null">
+        quantity = #{quantity,jdbcType=VARCHAR},
+      </if>
+      <if test="custom8 != null">
+        custom8 = #{custom8,jdbcType=VARCHAR},
+      </if>
+      <if test="custom4 != null">
+        custom4 = #{custom4,jdbcType=VARCHAR},
+      </if>
+      <if test="custom16 != null">
+        custom16 = #{custom16,jdbcType=VARCHAR},
+      </if>
+      <if test="custom7 != null">
+        custom7 = #{custom7,jdbcType=VARCHAR},
+      </if>
+      <if test="custom5 != null">
+        #{custom5,jdbcType=VARCHAR},
+      </if>
+      <if test="custom6 != null">
+        #{custom6,jdbcType=VARCHAR},
+      </if>
+      update_by = 'task任务',
+      update_time = sysdate()
+
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <delete id="deleteOrderDetailByOrderId" parameterType="java.lang.String">
+    delete from sale_order_detail
+    where sale_order_id = #{orderId,jdbcType=VARCHAR}
+  </delete>
+
+
+</mapper>

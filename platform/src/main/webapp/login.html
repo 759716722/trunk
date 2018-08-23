@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>登陆</title>
+
+    <link rel="stylesheet" type="text/css" href="static/css/login.css">
+    <link rel="stylesheet" href="static/lib/jquery/toastr/css/toastr.min.css" type="text/css"/>
+
+</head>
+
+<body>
+
+<div class="body"></div>
+
+
+<!--<div class="grad">-->
+<!--&lt;!&ndash;背景色灰蒙蒙&ndash;&gt;-->
+<!--</div>-->
+<div class="header">
+    <div>JWEI<span>科技</span></div>
+</div>
+<br>
+
+<div class="login">
+    <input type="text" placeholder="username" id="username"><br>
+    <input type="password" placeholder="password" id="password"><br>
+    <input type="button" onclick="login()" value="Login">
+</div>
+
+<script type="text/javascript" src="static/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="static/lib/jquery/toastr/js/toastr.min.js"></script>
+
+<script type="text/javascript">
+
+    $("#message").hide();
+
+    /*//1 常规消息提示，默认背景为浅蓝色
+     toastr.info("你有新消息了!");
+
+     //2 成功消息提示，默认背景为浅绿色
+     toastr.success("你有新消息了!");
+
+     //3 警告消息提示，默认背景为橘黄色
+     toastr.warning("你有新消息了!");
+
+     //4 错误消息提示，默认背景为浅红色
+     toastr.error("你有新消息了!");
+
+     //5 带标题的消息框
+     toastr.success("你有新消息了!","消息提示");
+
+     //6 另一种调用方法
+     toastr["info"]("你有新消息了!","消息提示");*/
+
+    document.onkeydown = function (event) {
+        if (event.keyCode == 13) {
+            event.returnValue = false;
+            event.cancel = true;
+            login();
+        }
+    }
+
+
+    function login() {
+        var username = $("#username").val();
+        var password = $("#password").val();
+        if (!(username && password)) {
+            toastr.warning("请填写用户名和密码!");
+
+//            $("#message").html("请填写用户名和密码!");
+//            $("#message").show();
+            return;
+        }
+        var url = "username=" + username + "&password=" + password;
+        $.ajax({
+            type: "POST",
+            url: "/sys/user/login.do",
+            data: url,
+            success: function (result) {
+                if (result.flag == "Y") {//登录成功
+                    location.href = 'index.html';
+                } else {
+                    toastr.warning(result.data);
+
+//                    $("#message").html(result.data);
+//                    $("#message").show();
+                }
+            },error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("错误信息:" + XMLHttpRequest.responseText); //获取的信息即是异常中的Message
+            }
+        });
+
+    }
+</script>
+</body>
+</html>

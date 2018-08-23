@@ -1,0 +1,133 @@
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            菜单信息
+        </h3>
+    </div>
+
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-6 col-md-3">
+                <div>
+                    <ul id="treeMenu" class="ztree"></ul>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-9">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-condensed">
+                        <caption>父菜单列表</caption>
+                        <thead>
+                        <tr>
+                            <th>类型</th>
+                            <th>名称</th>
+                            <th>URL</th>
+                            <th>描述</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-show="parentData">
+                            <td>{{parentData.type==1?'目录':parentData.type==2?'菜单':parentData.type==3?'按钮':''}}</td>
+                            <td>{{parentData.name}}</td>
+                            <td>{{parentData.url}}</td>
+                            <td>{{parentData.description}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-condensed">
+                        <caption>子菜单列表</caption>
+                        <thead>
+                        <tr>
+                            <th>类型</th>
+                            <th>名称</th>
+                            <th>URL</th>
+                            <th>描述</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="x in dataList">
+                            <td>{{x.type==1?'目录':x.type==2?'菜单':x.type==3?'按钮':''}}</td>
+                            <td>{{x.name}}</td>
+                            <td>{{x.url}}</td>
+                            <td>{{x.description}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- 添加功能模态框（Modal） -->
+<div class="modal fade" id="myAddModal" tabindex="-1" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- 标题 -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myAddModalLabel">新增菜单列表</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col-sm-12 col-md-12">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">类型</button>
+							    </span>
+                                <div class="form-control" style="text-align: center">
+                                    <button ng-class="addDataType==1?'btn btn-xs btn-success':'btn btn-xs'" ng-click="addDataType=1">目录</button>
+                                    &nbsp;&nbsp;
+                                    <button ng-class="addDataType==2?'btn btn-xs btn-danger':'btn btn-xs'" ng-click="addDataType=2">菜单</button>
+                                    &nbsp;&nbsp;
+                                    <button ng-class="addDataType==3?'btn btn-xs btn-primary':'btn btn-xs'" ng-click="addDataType=3">按钮</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover table-condensed">
+                                <caption>菜单列表</caption>
+                                <thead>
+                                <tr>
+                                    <th>名称</th>
+                                    <th>URL</th>
+                                    <th>描述</th>
+                                    <th>
+                                        <button class="btn btn-xs btn-info" ng-click="addList()">增加</button>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="x in addDataList">
+                                    <td><input class="form-control" ng-model="x.name"></td>
+                                    <td><input class="form-control" ng-model="x.url"></td>
+                                    <td><input class="form-control" ng-model="x.description"></td>
+                                    <td><button class="btn btn-xs btn-danger" ng-click="removeList(x.$$hashKey)">删除</button></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- 提交 -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-success" ng-click="createMenuList()">提交保存</button>
+            </div>
+        </div>
+    </div>
+</div>

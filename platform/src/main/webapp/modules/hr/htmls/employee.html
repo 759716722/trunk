@@ -1,0 +1,593 @@
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            员工信息
+        </h3>
+    </div>
+
+    <div class="panel-body">
+        <div class="row">
+
+            <div class="col-sm-6 col-md-3">
+                <div class="input-group">
+                    <span class="input-group-addon">姓名</span>
+                    <input type="text" class="form-control" ng-model="searchData.name">
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-md-3">
+                <div class="input-group">
+                    <span class="input-group-addon">合同到期</span>
+                    <laydate class="form-control" ng-model="searchData.contractMonth">{{searchData.contractMonth | date:'yyyy-MM-dd'}}</laydate>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-md-2">
+                <div class="input-group">
+                    <span class="input-group-addon">状态</span>
+                    <select select2 class="form-control" ng-model="searchData.state">
+                        <option value="">==全部==</option>
+                        <option ng-repeat="x in stateList" value="{{x.id}}">{{x.name}}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-md-2">
+                <div class="input-group">
+                    <span class="input-group-addon">生日</span>
+                    <select select2 class="form-control" ng-model="searchData.birthdayMonth">
+                        <option value="">==全部==</option>
+                        <option ng-repeat="x in monthList" value="{{x}}">{{x}}</option>
+                    </select>
+                </div>
+            </div>
+
+            <!--<div class="col-sm-6 col-md-2">-->
+                <!--<div class="input-group">-->
+                    <!--<span class="input-group-addon">学历</span>-->
+                    <!--<select select2 class="form-control" ng-model="searchData.education">-->
+                        <!--<option value="">==全部==</option>-->
+                        <!--<option ng-repeat="x in educationList" value="{{x.id}}">{{x.name}}</option>-->
+                    <!--</select>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="col-sm-12 col-md-12">-->
+            <!--</div>-->
+
+            <div class="col-sm-6 col-md-2">
+                <div class="form-group">
+                    <button class="btn btn-default" ng-click="searchEmployee()">查询</button>
+                    <button class="btn btn-info" ng-click="addEmployee()">新增</button>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-condensed">
+                <caption>员工列表</caption>
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>姓名</th>
+                    <th>性别</th>
+                    <th style="width: 5%">电话</th>
+                    <th>生日</th>
+                    <th>状态</th>
+                    <th>入职日期</th>
+                    <th>合同终止日期</th>
+                    <th>部门</th>
+                    <th>职务</th>
+                    <th>公司</th>
+                    <th>社保</th>
+                    <th>公积金</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="x in dataList">
+                    <td>{{x.rowNo}}</td>
+                    <td>{{x.name}}</td>
+                    <td>{{x.sex==1?'男':x.sex==2?'女':''}}</td>
+                    <td>{{x.phone}}</td>
+                    <td>{{x.birthday | date:'yyyy-MM-dd'}}</td>
+                    <td>
+                        <div class="btn-group" ng-click="doModifyState(x)">
+                            <button ng-class="x.state==1?'btn btn-xs btn-primary':'btn btn-xs'">在职</button>
+                            <button ng-class="x.state==0?'btn btn-xs btn-primary':'btn btn-xs'">离职</button>
+                        </div>
+                    </td>
+                    <td>{{x.joinDate | date:'yyyy-MM-dd'}}</td>
+                    <td ng-click="getContract(x.id)">{{x.contractEndDate | date:'yyyy-MM-dd'}}</td>
+                    <td>{{x.deptName}}</td>
+                    <td>{{x.duty}}</td>
+                    <td>{{x.ownCompany}}</td>
+                    <td>{{x.socialSecurity}}</td>
+                    <td>{{x.houseFund}}</td>
+                    <td>
+                        <button class="btn btn-xs btn-info" ng-click="editContract(x.id)">
+                            <span class="glyphicon glyphicon-edit">合同</span>
+                        </button>
+                        <button class="btn btn-xs btn-info" ng-click="editEmployee(x.id)">
+                            <span class="glyphicon glyphicon-edit">编辑</span>
+                        </button>
+                        <button class="btn btn-xs btn-danger" ng-click="doDeleteEmployee(x.id)">
+                            <span class="glyphicon glyphicon-trash">删除</span>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div class="panel-footer">
+        <div class="row">
+            <div class="col-sm-4 text-left text-center-xs">
+                <small class="text-muted inline m-t-sm m-b-sm">共{{dataCount}}条数据</small>
+            </div>
+            <div class="col-sm-8 text-right text-center-xs">
+                <my-pagination count-data="{{dataCount}}" one-page-total="{{searchData.onePageNum}}" curr-page="searchData.pageNo" get-date-func="searchEmployee()"></my-pagination>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <!-- 标题 -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">员工信息</h4>
+            </div>
+            <div class="modal-body pre-scrollable">
+                <div class="row">
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="panel-heading">
+                            <div class="input-group">
+                                <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">工号</button>
+							    </span>
+                                <input class="form-control" ng-model="addData.employeeNo" />
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="panel-heading">
+                            <div class="input-group">
+                                <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">姓名</button>
+							    </span>
+                                <input class="form-control" ng-model="addData.name" />
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">性别</button>
+							    </span>
+                                <select select2 class="form-control" ng-model="addData.sex">
+                                    <option ng-repeat="x in sexList" value="{{x.id}}">{{x.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">身份证</button>
+							    </span>
+                                <input class="form-control" ng-model="addData.idCard" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">生日</button>
+							    </span>
+                                <laydate class="form-control" ng-model="addData.birthday">{{addData.birthday | date:'yyyy-MM-dd'}}</laydate>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">电话</button>
+							    </span>
+                                <input class="form-control" ng-model="addData.phone" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">邮箱</button>
+							    </span>
+                                <input class="form-control" ng-model="addData.email" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">籍贯</button>
+							    </span>
+                                <input class="form-control" ng-model="addData.nativePlace" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">民族</button>
+							    </span>
+                                <input class="form-control" ng-model="addData.ethnicGroup" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">户口类型</button>
+							    </span>
+                                <input class="form-control" ng-model="addData.hukouType" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">家庭联系人</button>
+							    </span>
+                                <input class="form-control" ng-model="addData.familyLinkman" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">家庭关系</button>
+							    </span>
+                                <input class="form-control" ng-model="addData.familyRelation" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">联系人电话</button>
+							    </span>
+                                <input class="form-control" ng-model="addData.familyLinkphone" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-12">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">现居住地</button>
+							    </span>
+                                <input class="form-control" ng-model="addData.nowAddr" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-12">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">户籍地址</button>
+							    </span>
+                                <input class="form-control" ng-model="addData.familyAddr" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">学历</button>
+							    </span>
+                                <input class="form-control" ng-model="addData.education" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">学校</button>
+							    </span>
+                                <input class="form-control" ng-model="addData.university" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">专业</button>
+							    </span>
+                                <input class="form-control" ng-model="addData.major" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">毕业日期</button>
+							    </span>
+                                <laydate class="form-control" ng-model="addData.graduateDate">{{addData.graduateDate | date:'yyyy-MM-dd'}}</laydate>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">入职日期</button>
+							    </span>
+                                <laydate class="form-control" ng-model="addData.joinDate">{{addData.joinDate | date:'yyyy-MM-dd'}}</laydate>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">部门</button>
+							    </span>
+                                <input class="form-control" ng-model="addData.deptName" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">职务</button>
+							    </span>
+                                <input class="form-control" ng-model="addData.duty" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">职称</button>
+							    </span>
+                                <input class="form-control" ng-model="addData.professionalTitle" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">公司</button>
+							    </span>
+                                <input class="form-control" ng-model="addData.ownCompany" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">社保</button>
+							    </span>
+                                <input class="form-control" ng-model="addData.socialSecurity" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">公积金</button>
+							    </span>
+                                <input class="form-control" ng-model="addData.houseFund" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">状态</button>
+							    </span>
+                                <select select2 class="form-control" ng-model="addData.state">
+                                    <option ng-repeat="x in stateList" value="{{x.id}}">{{x.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-12">
+                        <div class="panel-heading">
+                            <div class="input-group">
+							    <span class="input-group-btn">
+								    <button class="btn btn-info" type="button">备注</button>
+							    </span>
+                                <input class="form-control" ng-model="addData.remark" />
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+            <!-- 提交 -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-success" ng-click="saveEmployee()">提交保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 离职日期模态框（Modal） -->
+<div class="modal fade" id="myLeaveDateModal" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <!-- 标题 -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">请选择离职日期，并确认</h4>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <button class="btn btn-info" type="button">离职日期</button>
+                    </span>
+                    <laydate class="form-control" ng-model="leaveDate">{{leaveDate | date:'yyyy-MM-dd'}}</laydate>
+                </div>
+            </div>
+            <!-- 提交 -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-success" ng-click="confirmModifyState()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 劳动合同模态框（Modal） -->
+<div class="modal fade" id="myContractModal" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- 标题 -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">请选择合同周期</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="panel-heading">
+                            <div class="input-group">
+                            <span class="input-group-btn">
+                                <button class="btn btn-info" type="button">开始日期</button>
+                            </span>
+                                <laydate class="form-control" ng-model="contractData.startDate">{{contractData.startDate | date:'yyyy-MM-dd'}}</laydate>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6">
+                        <div class="panel-heading">
+                            <div class="input-group">
+                            <span class="input-group-btn">
+                                <button class="btn btn-info" type="button">结束日期</button>
+                            </span>
+                                <laydate class="form-control" ng-model="contractData.endDate">{{contractData.endDate | date:'yyyy-MM-dd'}}</laydate>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 提交 -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-success" ng-click="saveContract()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 历次劳动合同模态框（Modal） -->
+<div class="modal fade" id="myContractListModal" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- 标题 -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">劳动合同记录</h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-condensed">
+                        <caption>劳动合同列表</caption>
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>开始日期</th>
+                            <th>结束日期</th>
+                            <th>创建人</th>
+                            <th>创建时间</th>
+                            <!--<th>修改人</th>-->
+                            <!--<th>修改时间</th>-->
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="x in contractList">
+                            <td>{{$index+1}}</td>
+                            <td>{{x.startDate | date:'yyyy-MM-dd'}}</td>
+                            <td>{{x.endDate | date:'yyyy-MM-dd'}}</td>
+                            <td>{{x.createName}}</td>
+                            <td>{{x.createDate | date:'yyyy-MM-dd'}}</td>
+                            <!--<td>{{x.modifyName}}</td>-->
+                            <!--<td>{{x.modifyDate | date:'yyyy-MM-dd'}}</td>-->
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- 提交 -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <!--<button type="button" class="btn btn-success" ng-click="saveContract()">确定</button>-->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
